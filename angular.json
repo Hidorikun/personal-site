@@ -23,9 +23,29 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/app/lib/bootstrap/css/bootstrap.min.css",
+              "src/app/lib/font-awesome/css/font-awesome.min.css",
+              "src/app/lib/animate/animate.min.css",
+              "src/app/lib/ionicons/css/ionicons.min.css",
+              "src/app/lib/owlcarousel/assets/owl.carousel.min.css",
+              "src/app/lib/lightbox/css/lightbox.min.css",
+              "src/app/css/style.css"
             ],
-            "scripts": [],
+            "scripts": [
+             "src/app/lib/jquery/jquery.min.js",
+             "src/app/lib/jquery/jquery-migrate.min.js",
+             "src/app/lib/popper/popper.min.js",
+             "src/app/lib/bootstrap/js/bootstrap.min.js",
+             "src/app/lib/easing/easing.min.js",
+             "src/app/lib/counterup/jquery.waypoints.min.js",
+             "src/app/lib/counterup/jquery.counterup.js",
+             "src/app/lib/owlcarousel/owl.carousel.min.js",
+             "src/app/lib/lightbox/js/lightbox.min.js",
+             "src/app/lib/typed/typed.min.js",
+             "src/app/contactform/contactform.js",
+             "src/app/js/main.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {
