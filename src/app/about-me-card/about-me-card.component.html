@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="box-shadow-full">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-sm-6 col-md-5">
+                <div class="about-img">
+                  <img src="../assets/img/profil.jpg" class="img-fluid rounded b-shadow-a" alt="">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-7">
+                <div class="about-info" >
+                  <p><span class="title-s">Name: </span> <span>Vele Radu-George</span></p>
+                  <p><span class="title-s">Profile: </span> <span>Software engineer</span></p>
+                  <p style="word-break: break-all"><span class="title-s" >Email: </span> <span>georgevele2016@gmail.com</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="skill-mf">
+              <p class="title-s">Skills:</p>
+              <div style="display: flex; flex-wrap: wrap;">
+                <img *ngFor="let skill of skills" [src]="skill.logo" class="logo img-fluid rounded b-shadow-a" [title]="skill.name">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="about-me pt-4 pt-md-0">
+              <div class="title-box-2">
+                <h5 class="title-left">
+                  About me
+                </h5>
+              </div>
+              <p class="lead">
+                Hi there, I am George. I have completed my bachelor in Computer Science and now I'm studying a
+                master's in Software Engineering and working part time in the industry.
+              </p>
+              <p class="lead">
+                I like learning and improving my skills whenever possible.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

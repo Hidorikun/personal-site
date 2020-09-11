@@ -28,7 +28,6 @@
 <!--</nav>-->
 <!--&lt;!&ndash;/ Nav End /&ndash;&gt;-->
 
-<!--/ Intro Skew Star /-->
 <div id="home" class="intro route bg-image" style="background-image: url(/assets/img/jita.jpg)">
   <div class="overlay-itro"></div>
   <div class="intro-content display-table">
@@ -42,65 +41,9 @@
     </div>
   </div>
 </div>
-<!--/ Intro Skew End /-->
 
 <section id="about" class="about-mf sect-pt4 route">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="box-shadow-full">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-sm-6 col-md-5">
-                  <div class="about-img">
-                    <img src="../assets/img/profil.jpg" class="img-fluid rounded b-shadow-a" alt="">
-                  </div>
-                </div>
-                <div class="col-sm-6 col-md-7">
-                  <div class="about-info" >
-                    <p><span class="title-s">Name: </span> <span>Vele Radu-George</span></p>
-                    <p><span class="title-s">Profile: </span> <span>Software engineer</span></p>
-                    <p style="word-break: break-all"><span class="title-s" >Email: </span> <span>georgevele2016@gmail.com</span></p>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-mf">
-                <p class="title-s">Skills</p>
-                <div style="display: flex; flex-wrap: wrap;">
-                  <img src="../assets/img/angular-logo.png" class="logo img-fluid rounded b-shadow-a" title="Angular2">
-                  <img src="../assets/img/java-logo-2.png" class="logo img-fluid rounded b-shadow-a" title="Java">
-                  <img src="../assets/img/kotlin-logo.png" class="logo img-fluid rounded b-shadow-a" title="Kotlin">
-                  <img src="../assets/img/cpp-logo.png" class="logo img-fluid rounded b-shadow-a" title="C++">
-                  <img src="../assets/img/python-logo.png" class="logo img-fluid rounded b-shadow-a" title="Python3">
-                  <img src="../assets/img/spring-boot.png" class="logo img-fluid rounded b-shadow-a" title="Spring Boot">
-                  <img src="../assets/img/git-logo.png" class="logo img-fluid rounded b-shadow-a" title="Git">
-                  <img src="../assets/img/sql-logo.png" class="logo img-fluid rounded b-shadow-a" title="SQL">
-                  <img src="../assets/img/mongo-logo.png" class="logo img-fluid rounded b-shadow-a" title="MongoDB">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="about-me pt-4 pt-md-0">
-                <div class="title-box-2">
-                  <h5 class="title-left">
-                    About me
-                  </h5>
-                </div>
-                <p class="lead">
-                  Hei there, I am George. I have finished my bachelor in informatics and now I'm studying a software engineering
-                  master, and working part time in the industry.
-                </p>
-                <p class="lead">
-                  I like learning and improving my skills whenever possible.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-about-me-card></app-about-me-card>
 </section>
 
 <div class="section-counter paralax-mf bg-image" style="background-image: url(/assets/img/counters-bg.jpg)">
@@ -125,7 +68,7 @@
           </div>
           <div class="counter-num">
             <p class="counter">11</p>
-            <span class="counter-text">AWARD WON</span>
+            <span class="counter-text">AWARDS WON</span>
           </div>
         </div>
       </div>
@@ -133,128 +76,10 @@
   </div>
 </div>
 
-<!--/ Section Projects Star /-->
 <section id="projects" class="portfolio-mf sect-pt4 route">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="title-box text-center">
-          <h3 class="title-a">
-            Projects
-          </h3>
-          <p class="subtitle-a">
-            For more cool projects, please visit my
-            <a href="https://github.com/Hidorikun" class="btn-link">GitHub</a>
-            page
-          </p>
-          <div class="line-mf"></div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="work-box">
-          <a href="../assets/img/project-loc-de-munca.png" data-lightbox="gallery-mf">
-            <div class="work-img">
-              <img src="../assets/img/project-loc-de-munca.png" alt="" class="img-fluid">
-            </div>
-          </a>
-          <div class="work-content">
-            <div class="row">
-              <div class="col-sm-8">
-                <h2 class="w-title">Job hunting</h2>
-                <div class="w-more">
-                  <span class="w-ctegory">Educational Desktop App</span> / <span class="w-date">2015</span>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="w-like">
-                  <a href="https://github.com/Hidorikun/In-cautarea-unui-loc-de-munca"><span class="ion-social-github"></span></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="work-box">
-          <a href="../assets/img/project-students-db.png" data-lightbox="gallery-mf">
-            <div class="work-img">
-              <img src="../assets/img/project-students-db.png" alt="" class="img-fluid">
-            </div>
-          </a>
-          <div class="work-content">
-            <div class="row">
-              <div class="col-sm-8">
-                <h2 class="w-title">Student Management System</h2>
-                <div class="w-more">
-                  <span class="w-ctegory">Management System</span> / <span class="w-date">2016</span>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="w-like">
-                  <a href="https://github.com/Hidorikun/Faculty-Database"><span class="ion-social-github"></span></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="work-box">
-          <a href="../assets/img/project-graf.png" data-lightbox="gallery-mf">
-            <div class="work-img">
-              <img src="../assets/img/project-graf.png" alt="" class="img-fluid">
-            </div>
-          </a>
-          <div class="work-content">
-            <div class="row">
-              <div class="col-sm-8">
-                <h2 class="w-title">Graph Exploration</h2>
-                <div class="w-more">
-                  <span class="w-ctegory">Educational Site</span> / <span class="w-date">2015</span>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="w-like">
-                  <a href="https://github.com/Hidorikun/Explorarea-Grafurilor"><span class="ion-social-github"></span></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="work-box">
-          <a href="../assets/img/project-motion-tracker.png" data-lightbox="gallery-mf">
-            <div class="work-img">
-              <img src="../assets/img/project-motion-tracker.png" alt="" class="img-fluid">
-            </div>
-          </a>
-          <div class="work-content">
-            <div class="row">
-              <div class="col-sm-8">
-                <h2 class="w-title">VR Arm Motion Tracking</h2>
-                <div class="w-more">
-                  <span class="w-ctegory">Bachelor's Thesis</span> / <span class="w-date">2019</span>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="w-like">
-                  <a href="https://github.com/Hidorikun/VR-Arm-Motion-Tracker"><span class="ion-social-github"></span></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+  <app-project-list></app-project-list>
 </section>
-<!--/ Section Projects End /-->
 
-<!--/ Section Contact-Footer Star /-->
 <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(/assets/img/overlay-bg.jpg)">
   <div class="overlay-mf"></div>
   <div class="container">
@@ -274,7 +99,7 @@
                     If you want to contact me, here are some ways you can do so.
                   </p>
                   <ul class="list-ico">
-                    <li><span class="ion-email"></span> georgevele2016@gmail.com</li>
+                    <li><span class="ion-ios-email-outline"></span> georgevele2016@gmail.com</li>
                   </ul>
                 </div>
                 <div class="socials">
@@ -311,7 +136,5 @@
     </div>
   </footer>
 </section>
-<!--/ Section Contact-footer End /-->
 
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-<!--<div id="preloader"></div>-->
