@@ -1,1 +1,1 @@
-Link: https://georgevele.com
+Link: http://georgevele.com/
