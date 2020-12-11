@@ -35,6 +35,13 @@ export class ProjectListComponent implements OnInit {
       category: 'Bachelor\'s Thesis',
       year: 2019,
       gitLink: 'https://github.com/Hidorikun/VR-Arm-Motion-Tracker'
+    },
+    {
+      thumbnail: '',
+      name: 'Chess',
+      category: 'Web Game',
+      year: 2021,
+      gitLink: './chess'
     }
   ];
 
