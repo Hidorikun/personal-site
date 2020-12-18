@@ -1,1 +1,118 @@
-<h3> chess component works </h3>
+<div class="page">
+  <div class="board" cdkDropListGroup>
+    <ng-container *ngFor="let row of board; let i = index">
+      <div *ngFor="let cell of row; let j = index"
+           cdkDropList
+           class="cell"
+           (cdkDropListDropped)="dropPiece(cell)"
+           [class.dark-cell]="cell.dark"
+           [class.highlighted]="cell.highlighted">
+
+          <fa-icon *ngIf="!!cell.piece"
+                   class="piece fa-3x"
+                   cdkDrag
+                   (cdkDragStarted)="dragPiece($event, i, j)"
+                   cdkDragBoundary=".board"
+                   [icon]="cell.piece.icon"
+                   [class.dark-piece]="cell.piece.dark">
+          </fa-icon>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<h1>Chessboard Using Pure CSS and No Images : <a href="http://code2care.org">Code2care</a>-->
+<!--  <div class="chessboard">-->
+<!--    &lt;!&ndash; 1st &ndash;&gt;-->
+<!--    <div class="white">&#9820;</div>-->
+<!--    <div class="black">&#9822;</div>-->
+<!--    <div class="white">&#9821;</div>-->
+<!--    <div class="black">&#9819;</div>-->
+<!--    <div class="white">&#9818;</div>-->
+<!--    <div class="black">&#9821;</div>-->
+<!--    <div class="white">&#9822;</div>-->
+<!--    <div class="black">&#9820;</div>-->
+<!--    &lt;!&ndash; 2nd &ndash;&gt;-->
+<!--    <div class="black">&#9823;</div>-->
+<!--    <div class="white">&#9823;</div>-->
+<!--    <div class="black">&#9823;</div>-->
+<!--    <div class="white">&#9823;</div>-->
+<!--    <div class="black">&#9823;</div>-->
+<!--    <div class="white">&#9823;</div>-->
+<!--    <div class="black">&#9823;</div>-->
+<!--    <div class="white">&#9823;</div>-->
+<!--    &lt;!&ndash; 3th &ndash;&gt;-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    &lt;!&ndash; 4st &ndash;&gt;-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    &lt;!&ndash; 5th &ndash;&gt;-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    &lt;!&ndash; 6th &ndash;&gt;-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    <div class="black"></div>-->
+<!--    <div class="white"></div>-->
+<!--    &lt;!&ndash; 7th &ndash;&gt;-->
+<!--    <div class="white">&#9817;</div>-->
+<!--    <div class="black">&#9817;</div>-->
+<!--    <div class="white">&#9817;</div>-->
+<!--    <div class="black">&#9817;</div>-->
+<!--    <div class="white">&#9817;</div>-->
+<!--    <div class="black">&#9817;</div>-->
+<!--    <div class="white">&#9817;</div>-->
+<!--    <div class="black">&#9817;</div>-->
+<!--    &lt;!&ndash; 8th &ndash;&gt;-->
+<!--    <div class="black">&#9814;</div>-->
+<!--    <div class="white">&#9816;</div>-->
+<!--    <div class="black">&#9815;</div>-->
+<!--    <div class="white">&#9813;</div>-->
+<!--    <div class="black">&#9812;</div>-->
+<!--    <div class="white">&#9815;</div>-->
+<!--    <div class="black">&#9816;</div>-->
+<!--    <div class="white">&#9814;</div>-->
+<!--  </div>-->
+<!--  <p style="font-size:12px"> check out detials : <a href="http://code2care.org/pages/chessboard-with-pieces-using-pure-html-and-css/">here</a></p>-->

@@ -7,6 +7,8 @@ import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { ChessComponent } from './chess/chess.component'
 import { ProfileComponent } from './profile/profile.component';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { ProfileComponent } from './profile/profile.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FontAwesomeModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

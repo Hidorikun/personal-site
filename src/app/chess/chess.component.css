@@ -1,0 +1,121 @@
+.page {
+  width: 100%;
+  height: 100%;
+  padding-top: 60px;
+
+  background: rgb(21,52,184);
+  background: radial-gradient(circle, rgba(21,52,184,1) 0%, rgba(44,9,121,1) 38%, rgba(23,0,42,1) 100%);
+}
+
+.board {
+  display: grid;
+  grid-template-rows: repeat(8, 12.5%);
+  grid-template-columns: repeat(8, 12.5%);
+
+  margin: auto;
+  width: 600px;
+  height: 600px;
+}
+
+.cell {
+
+  text-align: center;
+  z-index: 0;
+  background:
+    radial-gradient(white 15%, transparent 16%) 0 0,
+    radial-gradient(white 15%, transparent 16%) 8px 8px,
+    radial-gradient(rgba(234, 234, 234, 0.9) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(234, 234, 234, 0.9) 15%, transparent 20%) 8px 9px;
+  background-color: #ffffff;
+  background-size:16px 16px;
+
+  border: 2px solid white
+}
+
+.dark-cell {
+  z-index: 0;
+  background:
+    linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+    linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+    linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+    linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+  background-color: #131313;
+  background-size: 20px 20px;
+
+  border: 2px solid black;
+}
+
+.piece {
+  color: gray;
+}
+
+.dark-piece {
+  color: rgb(3, 66, 184);
+}
+
+.highlighted {
+    /*background: rgba(128, 255, 83, 0.72);*/
+
+  border: 5px dashed rgb(128, 255, 83)
+}
+
+/* Hang */
+@keyframes hvr-hang {
+  0% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes hvr-hang-sink {
+  100% {
+    transform: translateY(-10px);
+  }
+}
+.hvr-hang {
+  display: inline-block;
+  vertical-align: middle;
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.hvr-hang:hover, .hvr-hang:focus{
+  animation-name: hvr-hang-sink, hvr-hang;
+  animation-duration: .3s, 1.5s;
+  animation-delay: 0s, .3s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards;
+  animation-direction: normal, alternate;
+}
+
+
+.cdk-drag-preview {
+}
+
+.cdk-drag-placeholder {
+  display: none;
+}
+
+.cdk-drag-animating {
+}
+
+.cdk-drop-list {
+}
+
+.cdk-drag {
+  cursor: pointer;
+}
+
+.cdk-drag-disabled {
+  color: red;
+}
+
+.cdk-drop-list-dragging.highlighted {
+  border: 5px dashed rgb(3, 66, 184);
+}
