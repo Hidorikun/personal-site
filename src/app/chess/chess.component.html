@@ -2,7 +2,7 @@
   <div class="board"
        cdkDropListGroup
        [ngClass]="getBoardClasses()">
-    <ng-container *ngFor="let row of chessService.board; let i = index">
+    <ng-container *ngFor="let row of getBoard(); let i = index">
       <div *ngFor="let cell of row; let j = index"
            cdkDropList
            class="cell"

@@ -32,4 +32,8 @@ export class ChessComponent implements OnInit{
 
     return 'shadow-drop-top'
   }
+
+  getBoard() {
+    return this.chessService.board;
+  }
 }
