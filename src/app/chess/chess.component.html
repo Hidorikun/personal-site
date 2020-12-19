@@ -6,7 +6,8 @@
            class="cell"
            (cdkDropListDropped)="dropPiece(cell)"
            [class.dark-cell]="cell.dark"
-           [class.highlighted]="cell.highlighted">
+           [class.highlighted]="cell.highlighted"
+           [class.piece-container]="!!cell.piece">
 
           <fa-icon *ngIf="!!cell.piece"
                    class="piece fa-3x"

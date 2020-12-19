@@ -116,6 +116,11 @@
   color: red;
 }
 
-.cdk-drop-list-dragging.highlighted {
+.cdk-drop-list-dragging.highlighted,
+.cdk-drop-list-dragging.highlighted.piece-container{
   border: 5px dashed rgb(3, 66, 184);
+}
+
+.highlighted.piece-container {
+  border: 5px dashed red;
 }
