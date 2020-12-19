@@ -1,6 +1,8 @@
 <div class="page">
-  <div class="board" cdkDropListGroup>
-    <ng-container *ngFor="let row of board; let i = index">
+  <div class="board"
+       cdkDropListGroup
+       [ngClass]="getBoardClasses()">
+    <ng-container *ngFor="let row of chessService.board; let i = index">
       <div *ngFor="let cell of row; let j = index"
            cdkDropList
            class="cell"
@@ -12,10 +14,11 @@
           <fa-icon *ngIf="!!cell.piece"
                    class="piece fa-3x"
                    cdkDrag
-                   (cdkDragStarted)="dragPiece($event, i, j)"
+                   (cdkDragStarted)="dragPiece(i, j)"
+                   [cdkDragDisabled]="dragDisabled(cell.piece)"
                    cdkDragBoundary=".board"
                    [icon]="cell.piece.icon"
-                   [class.dark-piece]="cell.piece.dark">
+                   [ngClass]="cell.piece.getColor()">
           </fa-icon>
       </div>
     </ng-container>

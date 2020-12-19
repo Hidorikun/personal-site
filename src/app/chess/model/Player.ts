@@ -1,15 +1,23 @@
-import {Piece, PieceColorsEnum} from "./Piece";
+import {Piece} from "./Piece";
+import {PlayerColorEnum} from "./enums/PlayerColorEnum";
 
 export class Player {
   pieces: Array<Piece>;
-  color: PieceColorsEnum;
+  color: PlayerColorEnum;
 
-  constructor(pieces: Array<Piece>, color: PieceColorsEnum) {
-    this.pieces = pieces;
+  constructor(color: PlayerColorEnum) {
     this.color = color;
+  }
+
+  setPieces(pieces: Array<Piece>) {
+    this.pieces = pieces;
+    this.pieces.forEach(piece => {
+      piece.owner = this
+    })
   }
 
   removePiece(piece: Piece) {
     this.pieces = this.pieces.filter(p => p !== piece)
   }
+
 }

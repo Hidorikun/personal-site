@@ -1,29 +1,32 @@
 import {IconDefinition} from "@fortawesome/fontawesome-common-types";
+import {PieceTypeEnum} from "./enums/PieceTypeEnum";
+import {Player} from "./Player";
 
 export class Piece {
-  type: PieceTypesEnum;
+  type: PieceTypeEnum;
   icon: IconDefinition;
-  dark: boolean;
   wasMoved: boolean;
+  owner: Player;
+  row: number;
+  col: number;
 
-  constructor(type: PieceTypesEnum, icon: IconDefinition, black: boolean = false) {
+  constructor(type: PieceTypeEnum, icon: IconDefinition, row: number, col: number) {
     this.type = type;
     this.icon = icon;
-    this.dark = black;
     this.wasMoved = false;
+    this.row = row;
+    this.col = col;
+  }
+
+  setOwner(owner: Player) {
+    this.owner = owner;
+  }
+
+  getColor() {
+    return this.owner.color;
   }
 }
 
-export enum PieceTypesEnum {
-  PAWN,
-  KNIGHT,
-  BISHOP,
-  ROOK,
-  QUEEN,
-  KING
-}
 
-export enum PieceColorsEnum {
-  LIGHT,
-  DARK
-}
+
+

@@ -51,7 +51,7 @@
   color: gray;
 }
 
-.dark-piece {
+.dark {
   color: rgb(3, 66, 184);
 }
 
@@ -61,7 +61,25 @@
   border: 5px dashed rgb(128, 255, 83)
 }
 
-/* Hang */
+/* hang */
+.hvr-hang {
+  display: inline-block;
+  vertical-align: middle;
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.hvr-hang:hover,
+.hvr-hang:focus,
+.cdk-drop-list-dragging.highlighted.piece-container,
+.cdk-drop-list-dragging.highlighted{
+  animation-name: hvr-hang-sink, hvr-hang;
+  animation-duration: .3s, 1.5s;
+  animation-delay: 0s, .3s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards;
+  animation-direction: normal, alternate;
+}
 @keyframes hvr-hang {
   0% {
     transform: translateY(-10px);
@@ -78,22 +96,79 @@
     transform: translateY(-10px);
   }
 }
-.hvr-hang {
-  display: inline-block;
-  vertical-align: middle;
-  transform: perspective(1px) translateZ(0);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-}
-.hvr-hang:hover, .hvr-hang:focus{
-  animation-name: hvr-hang-sink, hvr-hang;
-  animation-duration: .3s, 1.5s;
-  animation-delay: 0s, .3s;
-  animation-timing-function: ease-out, ease-in-out;
+
+/* shadow drop bottom */
+.shadow-drop-top {
+  animation-name: shadow-drop-top, shadow-drop-top-pulse;
+  animation-duration: .5s, 2s;
+  animation-delay: 0s, .5s;
+  animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940), ease-in-out;
   animation-iteration-count: 1, infinite;
-  animation-fill-mode: forwards;
   animation-direction: normal, alternate;
+  animation-fill-mode: forwards;
+}
+@keyframes shadow-drop-top {
+  from {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  to {
+    box-shadow: 0 -55px 20px -40px rgba(255, 255, 255, 0.2),
+                0 -55px 30px -40px rgba(62, 121, 255, 0.2),
+                0 -55px 40px -40px rgba(38, 128, 255, 0.2),
+                0 -55px 55px -40px rgba(29, 106, 255, 0.2)
+  }
+}
+@keyframes shadow-drop-top-pulse {
+  from {
+    box-shadow: 0 -55px 20px -40px rgba(255, 255, 255, 0.2),
+                0 -55px 30px -40px rgba(62, 121, 255, 0.2),
+                0 -55px 40px -40px rgba(38, 128, 255, 0.2),
+                0 -55px 55px -40px rgba(29, 106, 255, 0.2)
+  }
+  to {
+    box-shadow: 0 -55px 20px -40px rgba(255, 255, 255, 0.5),
+                0 -55px 30px -40px rgba(62, 121, 255, 0.5),
+                0 -55px 40px -40px rgba(38, 128, 255, 0.5),
+                0 -55px 55px -40px rgba(29, 106, 255, 0.5)
+
+  }
 }
 
+/* shadow drop bottom */
+.shadow-drop-bottom {
+  animation-name: shadow-drop-bottom, shadow-drop-bottom-pulse;
+  animation-duration: .5s, 2s;
+  animation-delay: 0s, .5s;
+  animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940), ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-direction: normal, alternate;
+  animation-fill-mode: forwards;
+}
+@keyframes shadow-drop-bottom {
+  from {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  to {
+    box-shadow: 0 55px 20px -40px rgba(255, 255, 255, 0.2),
+    0 55px 30px -40px rgba(62, 121, 255, 0.2),
+    0 55px 40px -40px rgba(38, 128, 255, 0.2),
+    0 55px 55px -40px rgba(29, 106, 255, 0.2)
+  }
+}
+@keyframes shadow-drop-bottom-pulse {
+  from {
+    box-shadow: 0 55px 20px -40px rgba(255, 255, 255, 0.2),
+    0 55px 30px -40px rgba(62, 121, 255, 0.2),
+    0 55px 40px -40px rgba(38, 128, 255, 0.2),
+    0 55px 55px -40px rgba(29, 106, 255, 0.2)
+  }
+  to {
+    box-shadow: 0 55px 20px -40px rgba(255, 255, 255, 0.5),
+    0 55px 30px -40px rgba(62, 121, 255, 0.5),
+    0 55px 40px -40px rgba(38, 128, 255, 0.5),
+    0 55px 55px -40px rgba(29, 106, 255, 0.5)
+  }
+}
 
 .cdk-drag-preview {
 }
@@ -113,7 +188,7 @@
 }
 
 .cdk-drag-disabled {
-  color: red;
+  cursor: default;
 }
 
 .cdk-drop-list-dragging.highlighted,
