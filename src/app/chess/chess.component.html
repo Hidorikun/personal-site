@@ -1,24 +1,20 @@
 <div class="page">
-  <div class="board"
-       cdkDropListGroup
+  <div cdkDropListGroup
        [ngClass]="getBoardClasses()">
     <ng-container *ngFor="let row of getBoard(); let i = index">
       <div *ngFor="let cell of row; let j = index"
            cdkDropList
            class="cell"
            (cdkDropListDropped)="dropPiece(cell)"
-           [class.dark-cell]="cell.dark"
-           [class.highlighted]="cell.highlighted"
-           [class.piece-container]="!!cell.piece">
+           [ngClass]="getCellClasses(cell)">
 
           <fa-icon *ngIf="!!cell.piece"
-                   class="piece fa-3x"
                    cdkDrag
-                   (cdkDragStarted)="dragPiece(i, j)"
+                   (cdkDragStarted)="dragPiece(cell.piece)"
                    [cdkDragDisabled]="dragDisabled(cell.piece)"
                    cdkDragBoundary=".board"
                    [icon]="cell.piece.icon"
-                   [ngClass]="cell.piece.color">
+                   [ngClass]="getPieceClasses(cell.piece)">
           </fa-icon>
       </div>
     </ng-container>

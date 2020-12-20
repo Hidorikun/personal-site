@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ChessService} from "./services/chess.service";
 import {Piece} from "./model/Piece";
+import {PlayerColorEnum} from "./model/enums/PlayerColorEnum";
+import {Cell} from "./model/Cell";
+import {PieceTypeEnum} from "./model/enums/PieceTypeEnum";
 
 @Component({
   selector: 'app-chess',
@@ -17,8 +20,8 @@ export class ChessComponent implements OnInit{
     this.chessService.dropPiece(cell)
   }
 
-  dragPiece(row: number, col: number) {
-    this.chessService.dragPiece(row, col)
+  dragPiece(piece: Piece) {
+    this.chessService.dragPiece(piece)
   }
 
   dragDisabled(piece: Piece) {
@@ -26,14 +29,40 @@ export class ChessComponent implements OnInit{
   }
 
   getBoardClasses() {
-    if (this.chessService.activePlayer === this.chessService.lightPlayer) {
-      return 'shadow-drop-bottom'
+    const classes = new Array<string>();
+
+    classes.push('board');
+
+    if (this.chessService.piecesInCheck.length > 0) {
+      classes.push('red-glow');
+    } else {
+      classes.push(this.chessService.activePlayer === this.chessService.lightPlayer ? 'shadow-drop-bottom' : 'shadow-drop-top');
     }
 
-    return 'shadow-drop-top'
+    return classes;
   }
 
   getBoard() {
     return this.chessService.board;
+  }
+
+  getPieceClasses(piece: Piece) {
+    const classes = new Array<string>();
+
+    classes.push('fa-3x');
+    classes.push(piece.color === PlayerColorEnum.DARK ? 'dark-piece' : 'light-piece');
+
+    return classes;
+  }
+
+  getCellClasses(cell: Cell) {
+    const classes = new Array<string>();
+
+    classes.push(cell.dark ? 'dark-cell': '');
+    classes.push(cell.highlighted ? 'highlighted' : '');
+    classes.push(!!cell.piece ? 'piece-container' : '');
+    classes.push(this.chessService.getPiecesInCheck().includes(cell.piece) ? 'check': '');
+
+    return classes;
   }
 }

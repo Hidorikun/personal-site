@@ -47,18 +47,70 @@
   border: 2px solid black;
 }
 
-.piece {
+.light-piece {
   color: gray;
 }
 
-.dark {
+.dark-piece {
   color: rgb(3, 66, 184);
+}
+
+.check {
+  border: 5px dashed red;
 }
 
 .highlighted {
     /*background: rgba(128, 255, 83, 0.72);*/
 
-  border: 5px dashed rgb(128, 255, 83)
+  border: 5px dashed rgb(128, 255, 83);
+}
+
+.red-glow {
+  animation: red-glow 1s ease-in-out infinite alternate;
+}
+.gold-glow {
+  animation: gold-glow 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes red-glow {
+  from {
+    box-shadow: 0 0 10px 10px #fff,
+    0 0 20px #fff,
+    0 0 30px red,
+    0 0 40px red,
+    0 0 50px red,
+    0 0 60px red,
+    0 0 70px red;
+  }
+  to {
+    box-shadow: 0 0 20px #fff,
+    0 0 30px #ff3737,
+    0 0 40px #ff3737,
+    0 0 50px #ff3737,
+    0 0 60px #ff3737,
+    0 0 70px #ff3737,
+    0 0 80px #ff3737;
+  }
+}
+@-webkit-keyframes gold-glow {
+  from {
+    box-shadow: 0 0 10px 10px #fff,
+    0 0 20px #fff,
+    0 0 30px gold,
+    0 0 40px gold,
+    0 0 50px gold,
+    0 0 60px gold,
+    0 0 70px gold;
+  }
+  to {
+    box-shadow: 0 0 20px #fff,
+    0 0 30px #ffe843,
+    0 0 40px #ffe843,
+    0 0 50px #ffe843,
+    0 0 60px #ffe843,
+    0 0 70px #ffe843,
+    0 0 80px #ffe843;
+  }
 }
 
 /* hang */
