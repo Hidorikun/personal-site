@@ -20,7 +20,12 @@ export class ChessService {
   selectedCell: Cell;
   draggedPieceCell: Cell;
   hightlightedCells = new Array<Cell>();
+
   directions = new Map<DirectionsEnum, Array<[number, number]>>();
+  rookDirections = new Array<Array<[number, number]>>();
+  bishopDirections =  new Array<Array<[number, number]>>();
+  knightMoves: Array<[number, number]>;
+  kingMoves: Array<[number, number]>;
 
   constructor() {
     this.lightPlayer = new Player(PlayerColorEnum.LIGHT);
@@ -52,6 +57,7 @@ export class ChessService {
     if (cell.highlighted && cell !== this.draggedPieceCell) {
       cell.piece = this.draggedPieceCell.piece;
       cell.piece.wasMoved = true;
+      cell.piece.cell = cell;
       this.draggedPieceCell.piece = null;
       this.endTurn();
     }
@@ -59,12 +65,14 @@ export class ChessService {
     this.removeHighlightedCells();
   }
 
+  // PRIVATE
+
   private createBoard() {
     this.board = new Array<Array<Cell>>();
     for (let i = 0; i < 8; i++) {
       let row = new Array<any>();
       for (let j = 0; j < 8; j++) {
-        row.push(new Cell(i % 2 !== j % 2));
+        row.push(new Cell(i % 2 !== j % 2, i, j));
       }
       this.board.push(row);
     }
@@ -76,72 +84,63 @@ export class ChessService {
   }
 
   private placeLightPieces() {
+
+    const king = new Piece(PieceTypeEnum.KING, faChessKing, this.board[7][4]);
+
     const lightPieces = [
-      new Piece(PieceTypeEnum.ROOK, faChessRook, 7, 0),
-      new Piece(PieceTypeEnum.ROOK, faChessRook, 7, 7),
+      king,
+      new Piece(PieceTypeEnum.ROOK, faChessRook, this.board[7][0]),
+      new Piece(PieceTypeEnum.ROOK, faChessRook, this.board[7][7]),
 
-      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, 7, 1),
-      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, 7, 6),
+      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, this.board[7][1]),
+      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, this.board[7][6]),
 
-      new Piece(PieceTypeEnum.BISHOP, faChessBishop, 7, 2),
-      new Piece(PieceTypeEnum.BISHOP, faChessBishop, 7, 5),
+      new Piece(PieceTypeEnum.BISHOP, faChessBishop, this.board[7][2]),
+      new Piece(PieceTypeEnum.BISHOP, faChessBishop, this.board[7][5]),
 
-      new Piece(PieceTypeEnum.QUEEN, faChessQueen, 7, 3),
-      new Piece(PieceTypeEnum.KING, faChessKing, 7, 4),
+      new Piece(PieceTypeEnum.QUEEN, faChessQueen, this.board[7][3])
     ];
 
     for (let j = 0; j < 8; j++) {
-      lightPieces.push(new Piece(PieceTypeEnum.PAWN, faChessPawn, 6, j));
+      lightPieces.push(new Piece(PieceTypeEnum.PAWN, faChessPawn, this.board[6][j]));
     }
 
     this.lightPlayer.setPieces(lightPieces);
+    this.lightPlayer.king = king;
 
     lightPieces.forEach(piece => {
       this.board[piece.row][piece.col].piece = piece;
+
     });
   }
 
   private placeDarkPieces() {
+    let king = new Piece(PieceTypeEnum.KING, faChessKing, this.board[0][4]);
+
     const darkPieces = [
-      new Piece(PieceTypeEnum.ROOK, faChessRook, 0, 0),
-      new Piece(PieceTypeEnum.ROOK, faChessRook, 0, 7),
+      king,
+      new Piece(PieceTypeEnum.ROOK, faChessRook, this.board[0][0]),
+      new Piece(PieceTypeEnum.ROOK, faChessRook, this.board[0][7]),
 
-      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, 0, 1),
-      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, 0, 6),
+      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, this.board[0][1]),
+      new Piece(PieceTypeEnum.KNIGHT, faChessKnight, this.board[0][6]),
 
-      new Piece(PieceTypeEnum.BISHOP, faChessBishop, 0, 2),
-      new Piece(PieceTypeEnum.BISHOP, faChessBishop, 0, 5),
+      new Piece(PieceTypeEnum.BISHOP, faChessBishop, this.board[0][2]),
+      new Piece(PieceTypeEnum.BISHOP, faChessBishop, this.board[0][5]),
 
-      new Piece(PieceTypeEnum.QUEEN, faChessQueen, 0, 3),
-      new Piece(PieceTypeEnum.KING, faChessKing, 0, 4),
+      new Piece(PieceTypeEnum.QUEEN, faChessQueen, this.board[0][3])
     ];
 
     for (let j = 0; j < 8; j++) {
-      darkPieces.push(new Piece(PieceTypeEnum.PAWN, faChessPawn, 1, j));
+      darkPieces.push(new Piece(PieceTypeEnum.PAWN, faChessPawn, this.board[1][j]));
     }
 
     this.darkPlayer.setPieces(darkPieces);
+    this.darkPlayer.king = king;
 
     darkPieces.forEach(piece => {
       this.board[piece.row][piece.col].piece = piece;
     });
-  }
-
-  private setDirections() {
-    Object.values(DirectionsEnum).forEach( direction => {
-      this.directions.set(direction, []);
-    });
-
-    for (let i = 1; i < 8; i ++) {
-      this.directions.get(DirectionsEnum.NORTH).push([-i, 0]);
-      this.directions.get(DirectionsEnum.EAST).push([0, i]);
-      this.directions.get(DirectionsEnum.SOUTH).push([i, 0]);
-      this.directions.get(DirectionsEnum.WEST).push([0, -i]);
-      this.directions.get(DirectionsEnum.SOUTH_EAST).push([i, i]);
-      this.directions.get(DirectionsEnum.NORTH_EAST).push([-i, i]);
-      this.directions.get(DirectionsEnum.SOUTH_WEST).push([i, -i]);
-      this.directions.get(DirectionsEnum.NORTH_WEST).push([-i, -i]);
-    }
   }
 
   private highlightValidCells(row: number, col: number) {
@@ -165,38 +164,149 @@ export class ChessService {
   }
 
   // VALIDATORS
+
   private isNotFriendly(piece: Piece, cell: Cell): boolean {
     if (!!!cell.piece) {
       return true;
     }
 
-    return cell.piece.getColor() != piece.getColor();
+    return cell.piece.color != piece.color;
   }
 
-  private isEnemy(piece: Piece, cell: Cell): boolean {
-    if (!!!cell.piece) {
-      return false;
-    }
-
-    return cell.piece.getColor() != piece.getColor();
+  private isEnemyPresent(piece: Piece, cell: Cell): boolean {
+    return !!cell.piece && this.areEnemies(cell.piece, piece);
   }
 
-  private onBoard(targetRow, targetCol) {
+  private areEnemies(a: Piece, b: Piece) {
+    return a.color !== b.color;
+  }
+
+  private onBoard(targetRow, targetCol): boolean {
     return 0 <= targetRow && targetRow < 8 && 0 <= targetCol && targetCol < 8;
   }
 
-  private isEmpty(cell: Cell) {
+  private isEmpty(cell: Cell): boolean {
     return !!!cell.piece;
   }
 
+  private kingWouldBeSafe(movedPiece: Piece, targetCell: Cell): boolean {
+    const king = this.activePlayer.king === movedPiece ?
+      new Piece(this.activePlayer.king.type, null, targetCell, this.activePlayer) : this.activePlayer.king;
+
+    for (let direction of this.bishopDirections) {
+      const piece = this.getFirstPiece(direction, king, movedPiece, targetCell);
+
+      if (!!piece
+        && this.areEnemies(king, piece)
+        && (piece.type === PieceTypeEnum.BISHOP || piece.type === PieceTypeEnum.QUEEN)
+      ) {
+        return false;
+      }
+    }
+
+    for (let direction of this.rookDirections) {
+      const piece = this.getFirstPiece(direction, king, movedPiece, targetCell);
+
+      if (!!piece
+        && this.areEnemies(king, piece)
+        && (piece.type === PieceTypeEnum.ROOK || piece.type === PieceTypeEnum.QUEEN)
+      ) {
+        return false;
+      }
+    }
+
+    for (let move of this.knightMoves) {
+      const targetRow = king.row + move[0];
+      const targetCol = king.col + move[1];
+
+      if (this.onBoard(targetRow, targetCol)) {
+        const cell = this.board[targetRow][targetCol];
+
+        if (cell === targetCell) continue;
+
+        if (this.isEnemyPresent(king, cell) && (cell.piece.type === PieceTypeEnum.KNIGHT)) {
+          return false;
+        }
+      }
+    }
+
+    for (let move of this.kingMoves) {
+      const targetRow = king.row + move[0];
+      const targetCol = king.col + move[1];
+
+      if (this.onBoard(targetRow, targetCol)) {
+        const cell = this.board[targetRow][targetCol];
+
+        if (cell === targetCell) continue;
+
+        if (this.isEnemyPresent(king, cell) && (cell.piece.type === PieceTypeEnum.KING)) {
+          return false;
+        }
+      }
+    }
+
+    const forward = king.color == PlayerColorEnum.DARK ? 1 : -1;
+
+    for (let move of [[forward, -1], [forward, 1]]) {
+      const targetRow = king.row + move[0];
+      const targetCol = king.col + move[1];
+
+      if (this.onBoard(targetRow, targetCol)) {
+        const cell = this.board[targetRow][targetCol];
+
+        if (this.isEnemyPresent(king, cell) && cell.piece.type === PieceTypeEnum.PAWN) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   // PIECE MOVEMENT
+
+  private setDirections() {
+    Object.values(DirectionsEnum).forEach( direction => {
+      this.directions.set(direction, []);
+    });
+
+    for (let i = 1; i < 8; i ++) {
+      this.directions.get(DirectionsEnum.NORTH).push([-i, 0]);
+      this.directions.get(DirectionsEnum.EAST).push([0, i]);
+      this.directions.get(DirectionsEnum.SOUTH).push([i, 0]);
+      this.directions.get(DirectionsEnum.WEST).push([0, -i]);
+      this.directions.get(DirectionsEnum.SOUTH_EAST).push([i, i]);
+      this.directions.get(DirectionsEnum.NORTH_EAST).push([-i, i]);
+      this.directions.get(DirectionsEnum.SOUTH_WEST).push([i, -i]);
+      this.directions.get(DirectionsEnum.NORTH_WEST).push([-i, -i]);
+    }
+
+    this.rookDirections = [
+      this.directions.get(DirectionsEnum.NORTH),
+      this.directions.get(DirectionsEnum.EAST),
+      this.directions.get(DirectionsEnum.SOUTH),
+      this.directions.get(DirectionsEnum.WEST),
+    ];
+
+    this.bishopDirections = [
+      this.directions.get(DirectionsEnum.NORTH_WEST),
+      this.directions.get(DirectionsEnum.NORTH_EAST),
+      this.directions.get(DirectionsEnum.SOUTH_WEST),
+      this.directions.get(DirectionsEnum.SOUTH_EAST),
+    ];
+
+    this.knightMoves = [[-2, -1], [-2, 1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2]];
+
+    this.kingMoves = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+
+  }
 
   private getValidCells(piece: Piece, row: number, col: number): Array<Cell> {
     if (piece.type === PieceTypeEnum.PAWN) {
       return this.getPawnValidCells(piece, row, col);
     }
     if (piece.type === PieceTypeEnum.KNIGHT) {
-      return this.getKnightValidCells(piece, row, col);
+      return this.getKnightValidCells(piece);
     }
     if (piece.type === PieceTypeEnum.ROOK) {
       return this.getRookValidCells(piece, row, col);
@@ -208,29 +318,14 @@ export class ChessService {
       return this.getQueenValidCells(piece, row, col);
     }
     if (piece.type === PieceTypeEnum.KING) {
-      return this.getKingValidCells(piece, row, col);
+      return this.getKingValidCells(piece);
     }
   }
 
-  private getKnightValidCells(piece: Piece, row: number, col: number): Array<Cell> {
+  private getKnightValidCells(piece: Piece): Array<Cell> {
     const validCells = new Array<Cell>();
 
-    const potentialMoves = [
-      [-2, -1], [-2, 1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2]
-    ];
-
-    for (let move of potentialMoves) {
-      const targetRow = row + move[0];
-      const targetCol = col + move[1];
-
-      if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
-
-        if (this.isNotFriendly(piece, cell)) {
-          validCells.push(cell);
-        }
-      }
-    }
+    this.addPotentialValidCells(this.knightMoves, piece, validCells);
 
     return validCells;
   }
@@ -238,11 +333,11 @@ export class ChessService {
   private getPawnValidCells(piece: Piece, row: number, col: number): Array<Cell> {
     const validCells = new Array<Cell>();
 
-    const forward = piece.getColor() == PlayerColorEnum.DARK ? 1 : -1;
+    const forward = piece.color == PlayerColorEnum.DARK ? 1 : -1;
 
     if (this.onBoard(row + forward, col)) {
       let cell = this.board[row + forward][col];
-      if (this.isEmpty(cell)) {
+      if (this.isEmpty(cell) && this.kingWouldBeSafe(piece, cell)) {
         validCells.push(cell);
 
         if (this.onBoard(row + forward * 2, col)) {
@@ -256,10 +351,10 @@ export class ChessService {
       }
     }
 
-    for (let direction of [[forward, -1], [forward, 1]]) {
-      if (this.onBoard(row + direction[0], col + direction[1])) {
-        const cell = this.board[row + direction[0]][col + direction[1]];
-        if (this.isEnemy(piece, cell)) {
+    for (let move of [[forward, -1], [forward, 1]]) {
+      if (this.onBoard(row + move[0], col + move[1])) {
+        const cell = this.board[row + move[0]][col + move[1]];
+        if (this.isEnemyPresent(piece, cell) && this.kingWouldBeSafe(piece, cell)) {
           validCells.push(cell)
         }
       }
@@ -271,14 +366,7 @@ export class ChessService {
   private getRookValidCells(piece: Piece, row: number, col: number): Array<Cell> {
     const validCells = new Array<Cell>();
 
-    const rookDirections = [
-      this.directions.get(DirectionsEnum.NORTH),
-      this.directions.get(DirectionsEnum.EAST),
-      this.directions.get(DirectionsEnum.SOUTH),
-      this.directions.get(DirectionsEnum.WEST),
-    ];
-
-    rookDirections.forEach( direction => {
+    this.rookDirections.forEach( direction => {
       this.addDirectionValidCells(direction, row, col, piece, validCells);
     });
 
@@ -288,14 +376,7 @@ export class ChessService {
   private getBishopValidCells(piece: Piece, row: number, col: number): Array<Cell> {
     const validCells = new Array<Cell>();
 
-    const bishopDirections = [
-      this.directions.get(DirectionsEnum.NORTH_WEST),
-      this.directions.get(DirectionsEnum.NORTH_EAST),
-      this.directions.get(DirectionsEnum.SOUTH_WEST),
-      this.directions.get(DirectionsEnum.SOUTH_EAST),
-    ];
-
-    bishopDirections.forEach( direction => {
+   this.bishopDirections.forEach( direction => {
       this.addDirectionValidCells(direction, row, col, piece, validCells);
     });
 
@@ -312,24 +393,28 @@ export class ChessService {
     return validCells;
   }
 
-  private getKingValidCells(piece: Piece, row: number, col: number): Array<Cell> {
+  private getKingValidCells(piece: Piece): Array<Cell> {
     const validCells = new Array<Cell>();
 
-    const potentialMoves = [[-1, -1],[-1, 0],[-1, 1],[0, -1],[0, 1],[1, -1],[1, 0],[1, 1]];
+    const potentialMoves = this.kingMoves;
 
-    potentialMoves.forEach( move => {
-      const newRow = row + move[0];
-      const newCol = col + move[1];
+    this.addPotentialValidCells(potentialMoves, piece, validCells);
+
+    return validCells;
+  }
+
+  private addPotentialValidCells(potentialMoves, piece: Piece, validCells) {
+    potentialMoves.forEach(move => {
+      const newRow = piece.row + move[0];
+      const newCol = piece.col + move[1];
 
       if (this.onBoard(newRow, newCol)) {
         const cell = this.board[newRow][newCol];
-        if (this.isNotFriendly(piece, cell)) {
+        if (this.isNotFriendly(piece, cell) && this.kingWouldBeSafe(piece, cell)) {
           validCells.push(cell);
         }
       }
     });
-
-    return validCells;
   }
 
   private addDirectionValidCells(direction, row: number, col: number, piece: Piece, validCells) {
@@ -337,20 +422,40 @@ export class ChessService {
       const targetRow = row + move[0];
       const targetCol = col + move[1];
 
-      if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
-        if (this.isNotFriendly(piece, cell)) {
+      if (!this.onBoard(targetRow, targetCol)) return;
+
+      const cell = this.board[targetRow][targetCol];
+      if (!!cell.piece) {
+        if (this.areEnemies(piece, cell.piece) && this.kingWouldBeSafe(piece, cell)) {
           validCells.push(cell);
-
-          if (this.isEnemy(piece, cell)) {
-            break;
-          }
-
-          continue
         }
+        return;
       }
-      break;
+
+      if (this.kingWouldBeSafe(piece, cell)) {
+        validCells.push(cell);
+      }
     }
   }
 
+  private getFirstPiece(direction: Array<[number, number]>, piece: Piece, movedPiece: Piece, targetCell: Cell): Piece {
+    for (let move of direction) {
+      const targetRow = piece.row + move[0];
+      const targetCol = piece.col + move[1];
+
+      if (!this.onBoard(targetRow, targetCol)) {
+        return null;
+      }
+
+      const cell = this.board[targetRow][targetCol];
+
+      if (cell === targetCell) {
+        return movedPiece;
+      }
+
+      if (!!cell.piece && cell.piece !== movedPiece) {
+        return cell.piece;
+      }
+    }
+  }
 }

@@ -4,6 +4,7 @@ import {PlayerColorEnum} from "./enums/PlayerColorEnum";
 export class Player {
   pieces: Array<Piece>;
   color: PlayerColorEnum;
+  king: Piece;
 
   constructor(color: PlayerColorEnum) {
     this.color = color;

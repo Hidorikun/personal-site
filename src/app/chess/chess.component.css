@@ -71,7 +71,8 @@
 .hvr-hang:hover,
 .hvr-hang:focus,
 .cdk-drop-list-dragging.highlighted.piece-container,
-.cdk-drop-list-dragging.highlighted{
+.cdk-drop-list-dragging.highlighted,
+.highlighted{
   animation-name: hvr-hang-sink, hvr-hang;
   animation-duration: .3s, 1.5s;
   animation-delay: 0s, .3s;
