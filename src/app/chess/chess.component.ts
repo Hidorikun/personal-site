@@ -48,6 +48,7 @@ export class ChessComponent implements OnInit{
   }
 
   gameEnded() {
+    // return true;
     return !!this.chessService.victoriousPlayer;
   }
 
@@ -86,11 +87,20 @@ export class ChessComponent implements OnInit{
   }
 
   getlastMovedPiece() {
+    // return this.chessService.lightPlayer.king;
     return this.chessService.lastMovedPiece;
   }
 
   getVictoryMessage() {
     return this.chessService.victoriousPlayer === this.chessService.lightPlayer ?
       "White wins!" : "Black wins!";
+  }
+
+  getDarkCapturedPieces() {
+    return this.chessService.darkPlayer.capturedPieces;
+  }
+
+  getLightCapturedPieces() {
+    return this.chessService.lightPlayer.capturedPieces;
   }
 }

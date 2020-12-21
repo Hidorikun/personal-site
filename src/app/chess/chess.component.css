@@ -119,6 +119,25 @@
   top: 50%;
 }
 
+.dark-captured-container {
+  position: relative;
+  width: 600px;
+  bottom: 651px;
+  color: gray;
+}
+
+.light-captured-container {
+  position: relative;
+  width: 600px;
+  left: -75px;
+  color: rgb(3, 66, 184);
+}
+
+.captured-piece {
+  font-size: 2rem;
+  padding-right: 8px
+}
+
 .red-glow {
   animation: red-glow 1s ease-in-out infinite alternate;
 }

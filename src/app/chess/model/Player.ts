@@ -3,11 +3,13 @@ import {PlayerColorEnum} from "./enums/PlayerColorEnum";
 
 export class Player {
   pieces: Array<Piece>;
+  capturedPieces: Array<Piece>;
   color: PlayerColorEnum;
   king: Piece;
 
   constructor(color: PlayerColorEnum) {
     this.color = color;
+    this.capturedPieces = [];
   }
 
   setPieces(pieces: Array<Piece>) {
@@ -21,4 +23,8 @@ export class Player {
     this.pieces = this.pieces.filter(p => p !== piece)
   }
 
+  capturePiece(piece:Piece) {
+    this.capturedPieces.push(piece);
+    piece.owner.removePiece(piece);
+  }
 }

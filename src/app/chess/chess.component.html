@@ -36,5 +36,19 @@
 
 
     </div>
+    <div class="dark-captured-container">
+      <fa-icon *ngFor="let piece of getDarkCapturedPieces()"
+               [icon]="piece.icon"
+               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
+               class="captured-piece"
+      ></fa-icon>
+    </div>
+    <div class="light-captured-container">
+      <fa-icon *ngFor="let piece of getLightCapturedPieces()"
+               [icon]="piece.icon"
+               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
+               class="captured-piece"
+      ></fa-icon>
+    </div>
   </div>
 </div>

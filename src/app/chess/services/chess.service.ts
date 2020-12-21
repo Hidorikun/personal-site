@@ -60,9 +60,10 @@ export class ChessService {
 
   dropPiece(cell: Cell) {
     if (cell.highlighted && cell !== this.draggedPieceCell) {
-      cell.piece = this.draggedPieceCell.piece;
-      cell.piece.wasMoved = true;
-      cell.piece.cell = cell;
+      if (!!cell.piece) {
+        this.activePlayer.capturePiece(cell.piece);
+      }
+      cell.placePiece(this.draggedPieceCell.piece);
       this.draggedPieceCell.piece = null;
       this.lastMovedPiece = cell.piece;
 

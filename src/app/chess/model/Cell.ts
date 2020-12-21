@@ -13,4 +13,10 @@ export class Cell {
     this.row = row;
     this.col = col;
   }
+
+  placePiece(piece: Piece) {
+    this.piece = piece;
+    this.piece.cell = this;
+    this.piece.wasMoved = true;
+  }
 }
