@@ -269,11 +269,17 @@ export class ChessService {
   private detectMate() {
     const enemyPlayer = this.activePlayer === this.lightPlayer ? this.darkPlayer : this.lightPlayer;
 
-    const validKingMoves = this.getValidCells(enemyPlayer.king);
-
-    if (validKingMoves.length === 0 && this.piecesInCheck.includes(enemyPlayer.king)) {
+    if (this.piecesInCheck.includes(enemyPlayer.king) && !this.playerHasAvailableMoves(enemyPlayer)) {
       this.victoriousPlayer = this.activePlayer;
     }
+  }
+
+  private playerHasAvailableMoves(player: Player) {
+    return player.pieces.some(piece => this.canMove(piece));
+  }
+
+  private canMove(piece: Piece) {
+    return this.getValidCells(piece).length > 0;
   }
 
   private endTurn() {
