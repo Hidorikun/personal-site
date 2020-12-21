@@ -65,11 +65,68 @@
   border: 5px dashed rgb(128, 255, 83);
 }
 
+.dialog-wrapper {
+  position: relative;
+  left: 200px;
+  bottom: 402px;
+  height: 200px;
+  width: 200px;
+}
+
+.dialog {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 13px;
+  box-shadow: 0 0 10px black;
+  background: radial-gradient(circle, rgba(245,245,245,1) 0%, rgba(255,255,255,1) 100%);
+}
+
+.dialog-piece {
+  position: absolute;
+}
+
+.l-30 {
+  left: 30%;
+}
+
+.l-35 {
+  left: 35%;
+}
+
+.ribbon {
+  background: rgb(128, 255, 83);
+  height: 26%;
+  width: 110%;
+  position: absolute;
+  left: -5%;
+  top: 60%;
+
+  text-align: center;
+}
+
+.ribbon-side-left {
+  position: absolute;
+  left: -15%;
+  color: rgb(108, 215, 80);
+  top: 50%;
+}
+
+.ribbon-side-right {
+  position: absolute;
+  right: -15%;
+  color: rgb(108, 215, 80);
+  top: 50%;
+}
+
 .red-glow {
   animation: red-glow 1s ease-in-out infinite alternate;
 }
 .gold-glow {
   animation: gold-glow 1s ease-in-out infinite alternate;
+}
+.green-glow {
+  animation: green-glow 1s ease-in-out infinite alternate;
 }
 
 @-webkit-keyframes red-glow {
@@ -90,6 +147,26 @@
     0 0 60px #ff3737,
     0 0 70px #ff3737,
     0 0 80px #ff3737;
+  }
+}
+@-webkit-keyframes green-glow {
+  from {
+    box-shadow: 0 0 10px 10px #fff,
+    0 0 20px #fff,
+    0 0 30px rgb(108, 215, 80),
+    0 0 40px rgb(108, 215, 80),
+    0 0 50px rgb(108, 215, 80),
+    0 0 60px rgb(108, 215, 80),
+    0 0 70px rgb(108, 215, 80);
+  }
+  to {
+    box-shadow: 0 0 20px #fff,
+    0 0 30px rgb(128, 255, 83),
+    0 0 40px rgb(128, 255, 83),
+    0 0 50px rgb(128, 255, 83),
+    0 0 60px rgb(128, 255, 83),
+    0 0 70px rgb(128, 255, 83),
+    0 0 80px rgb(128, 255, 83);
   }
 }
 @-webkit-keyframes gold-glow {

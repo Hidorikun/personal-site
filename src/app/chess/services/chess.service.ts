@@ -15,11 +15,13 @@ export class ChessService {
   lightPlayer: Player;
   darkPlayer: Player;
   activePlayer: Player;
+  victoriousPlayer: Player;
 
   board: Array<Array<Cell>>;
   selectedCell: Cell;
   draggedPieceCell: Cell;
   hightlightedCells = new Array<Cell>();
+  lastMovedPiece: Piece;
 
   directions = new Map<DirectionsEnum, Array<[number, number]>>();
   rookDirections = new Array<Array<[number, number]>>();
@@ -27,6 +29,7 @@ export class ChessService {
   knightMoves: Array<[number, number]>;
   kingMoves: Array<[number, number]>;
   piecesInCheck: Array<Piece>;
+
 
   constructor() {
     this.lightPlayer = new Player(PlayerColorEnum.LIGHT);
@@ -61,8 +64,11 @@ export class ChessService {
       cell.piece.wasMoved = true;
       cell.piece.cell = cell;
       this.draggedPieceCell.piece = null;
+      this.lastMovedPiece = cell.piece;
 
       this.detectCheck();
+      this.detectMate();
+
       this.endTurn();
     }
 
@@ -71,6 +77,15 @@ export class ChessService {
 
   getPiecesInCheck() {
     return this.piecesInCheck;
+  }
+
+  highlightValidCells(piece: Piece) {
+    this.removeHighlightedCells();
+
+    for (let cell of this.getValidCells(piece)) {
+      cell.highlighted = true;
+      this.hightlightedCells.push(cell);
+    }
   }
 
   // PRIVATE
@@ -149,16 +164,6 @@ export class ChessService {
     darkPieces.forEach(piece => {
       this.board[piece.row][piece.col].piece = piece;
     });
-  }
-
-  private highlightValidCells(piece: Piece) {
-    this.removeHighlightedCells();
-
-
-    for (let cell of this.getValidCells(piece)) {
-      cell.highlighted = true;
-      this.hightlightedCells.push(cell);
-    }
   }
 
   private removeHighlightedCells() {
@@ -255,6 +260,22 @@ export class ChessService {
     return dangerousPieces;
   }
 
+  private printBoard(board: Array<Array<Cell>>) {
+    board.forEach(row => {
+      console.log(row.map(cell => !!cell.piece ? cell.piece.type : ' '));
+    });
+  }
+
+  private detectMate() {
+    const enemyPlayer = this.activePlayer === this.lightPlayer ? this.darkPlayer : this.lightPlayer;
+
+    const validKingMoves = this.getValidCells(enemyPlayer.king);
+
+    if (validKingMoves.length === 0 && this.piecesInCheck.includes(enemyPlayer.king)) {
+      this.victoriousPlayer = this.activePlayer;
+    }
+  }
+
   private endTurn() {
     this.activePlayer = this.activePlayer === this.lightPlayer ? this.darkPlayer : this.lightPlayer;
   }
@@ -286,8 +307,8 @@ export class ChessService {
   }
 
   private kingWouldBeSafe(movedPiece: Piece, targetCell: Cell): boolean {
-    const king = this.activePlayer.king === movedPiece ?
-      new Piece(this.activePlayer.king.type, null, targetCell, this.activePlayer) : this.activePlayer.king;
+    const king = movedPiece.owner.king === movedPiece ?
+      new Piece(movedPiece.owner.king.type, null, targetCell, movedPiece.owner) : movedPiece.owner.king;
 
     for (let direction of this.bishopDirections) {
       const piece = this.getFirstPiece(direction, king, movedPiece, targetCell);

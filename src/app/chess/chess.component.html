@@ -11,108 +11,31 @@
           <fa-icon *ngIf="!!cell.piece"
                    cdkDrag
                    (cdkDragStarted)="dragPiece(cell.piece)"
-                   [cdkDragDisabled]="dragDisabled(cell.piece)"
+                   [cdkDragDisabled]="pieceDisabled(cell.piece)"
                    cdkDragBoundary=".board"
                    [icon]="cell.piece.icon"
+                   (click)="highlightValidMoves(cell.piece)"
                    [ngClass]="getPieceClasses(cell.piece)">
           </fa-icon>
       </div>
     </ng-container>
+    <div *ngIf=gameEnded() class="dialog-wrapper" >
+
+      <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-left" [rotate]="90"></fa-icon>
+      <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-right" [rotate]="270"></fa-icon>
+
+      <div class="dialog"></div>
+
+      <fa-icon *ngIf="!!getlastMovedPiece()"
+               [icon]="getlastMovedPiece().icon"
+               [ngClass]="getDialogPieceClasses(getlastMovedPiece())">
+      </fa-icon>
+
+      <div class="ribbon">
+        <h3>{{getVictoryMessage()}}</h3>
+      </div>
+
+
+    </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--<h1>Chessboard Using Pure CSS and No Images : <a href="http://code2care.org">Code2care</a>-->
-<!--  <div class="chessboard">-->
-<!--    &lt;!&ndash; 1st &ndash;&gt;-->
-<!--    <div class="white">&#9820;</div>-->
-<!--    <div class="black">&#9822;</div>-->
-<!--    <div class="white">&#9821;</div>-->
-<!--    <div class="black">&#9819;</div>-->
-<!--    <div class="white">&#9818;</div>-->
-<!--    <div class="black">&#9821;</div>-->
-<!--    <div class="white">&#9822;</div>-->
-<!--    <div class="black">&#9820;</div>-->
-<!--    &lt;!&ndash; 2nd &ndash;&gt;-->
-<!--    <div class="black">&#9823;</div>-->
-<!--    <div class="white">&#9823;</div>-->
-<!--    <div class="black">&#9823;</div>-->
-<!--    <div class="white">&#9823;</div>-->
-<!--    <div class="black">&#9823;</div>-->
-<!--    <div class="white">&#9823;</div>-->
-<!--    <div class="black">&#9823;</div>-->
-<!--    <div class="white">&#9823;</div>-->
-<!--    &lt;!&ndash; 3th &ndash;&gt;-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    &lt;!&ndash; 4st &ndash;&gt;-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    &lt;!&ndash; 5th &ndash;&gt;-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    &lt;!&ndash; 6th &ndash;&gt;-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    <div class="black"></div>-->
-<!--    <div class="white"></div>-->
-<!--    &lt;!&ndash; 7th &ndash;&gt;-->
-<!--    <div class="white">&#9817;</div>-->
-<!--    <div class="black">&#9817;</div>-->
-<!--    <div class="white">&#9817;</div>-->
-<!--    <div class="black">&#9817;</div>-->
-<!--    <div class="white">&#9817;</div>-->
-<!--    <div class="black">&#9817;</div>-->
-<!--    <div class="white">&#9817;</div>-->
-<!--    <div class="black">&#9817;</div>-->
-<!--    &lt;!&ndash; 8th &ndash;&gt;-->
-<!--    <div class="black">&#9814;</div>-->
-<!--    <div class="white">&#9816;</div>-->
-<!--    <div class="black">&#9815;</div>-->
-<!--    <div class="white">&#9813;</div>-->
-<!--    <div class="black">&#9812;</div>-->
-<!--    <div class="white">&#9815;</div>-->
-<!--    <div class="black">&#9816;</div>-->
-<!--    <div class="white">&#9814;</div>-->
-<!--  </div>-->
-<!--  <p style="font-size:12px"> check out detials : <a href="http://code2care.org/pages/chessboard-with-pieces-using-pure-html-and-css/">here</a></p>-->

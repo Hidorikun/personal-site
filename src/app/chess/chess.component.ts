@@ -4,6 +4,7 @@ import {Piece} from "./model/Piece";
 import {PlayerColorEnum} from "./model/enums/PlayerColorEnum";
 import {Cell} from "./model/Cell";
 import {PieceTypeEnum} from "./model/enums/PieceTypeEnum";
+import {faBookmark} from "@fortawesome/free-solid-svg-icons/faBookmark";
 
 @Component({
   selector: 'app-chess',
@@ -11,6 +12,7 @@ import {PieceTypeEnum} from "./model/enums/PieceTypeEnum";
   styleUrls: ['./chess.component.css']
 })
 export class ChessComponent implements OnInit{
+  faBookmark = faBookmark;
 
   constructor(private chessService: ChessService) {}
 
@@ -24,8 +26,9 @@ export class ChessComponent implements OnInit{
     this.chessService.dragPiece(piece)
   }
 
-  dragDisabled(piece: Piece) {
-    return piece.owner != this.chessService.activePlayer;
+  pieceDisabled(piece: Piece) {
+    return (piece.owner != this.chessService.activePlayer)
+      || this.gameEnded();
   }
 
   getBoardClasses() {
@@ -33,13 +36,19 @@ export class ChessComponent implements OnInit{
 
     classes.push('board');
 
-    if (this.chessService.piecesInCheck.length > 0) {
+    if (this.gameEnded()) {
+      classes.push('green-glow')
+    } else if (this.chessService.piecesInCheck.length > 0) {
       classes.push('red-glow');
     } else {
       classes.push(this.chessService.activePlayer === this.chessService.lightPlayer ? 'shadow-drop-bottom' : 'shadow-drop-top');
     }
 
     return classes;
+  }
+
+  gameEnded() {
+    return !!this.chessService.victoriousPlayer;
   }
 
   getBoard() {
@@ -55,6 +64,16 @@ export class ChessComponent implements OnInit{
     return classes;
   }
 
+  getDialogPieceClasses(piece: Piece) {
+    const classes = new Array<string>();
+
+    classes.push('fa-5x');
+    classes.push('dialog-piece');
+    classes.push(piece.color === PlayerColorEnum.DARK ? 'dark-piece' : 'light-piece');
+    classes.push(piece.type === PieceTypeEnum.KING || piece.type === PieceTypeEnum.QUEEN ? 'l-30' : 'l-35');
+
+    return classes;
+  }
   getCellClasses(cell: Cell) {
     const classes = new Array<string>();
 
@@ -64,5 +83,20 @@ export class ChessComponent implements OnInit{
     classes.push(this.chessService.getPiecesInCheck().includes(cell.piece) ? 'check': '');
 
     return classes;
+  }
+
+  highlightValidMoves(piece: Piece) {
+    if (!this.pieceDisabled(piece)) {
+      this.chessService.highlightValidCells(piece);
+    }
+  }
+
+  getlastMovedPiece() {
+    return this.chessService.lastMovedPiece;
+  }
+
+  getVictoryMessage() {
+    return this.chessService.victoriousPlayer === this.chessService.lightPlayer ?
+      "White wins!" : "Black wins!";
   }
 }
