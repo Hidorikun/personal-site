@@ -37,10 +37,10 @@ export class ProjectListComponent implements OnInit {
       gitLink: 'https://github.com/Hidorikun/VR-Arm-Motion-Tracker'
     },
     {
-      thumbnail: '',
+      thumbnail: '../assets/img/chess.png',
       name: 'Chess',
       category: 'Web Game',
-      year: 2021,
+      year: 2020,
       gitLink: './chess'
     }
   ];
