@@ -85,12 +85,6 @@ export class ChessComponent implements OnInit{
     return classes;
   }
 
-  highlightValidMoves(piece: Piece) {
-    if (!this.pieceDisabled(piece)) {
-      this.chessService.highlightValidCells(piece);
-    }
-  }
-
   getlastMovedPiece() {
     return this.chessService.lastMovedPiece;
   }

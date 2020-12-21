@@ -459,7 +459,7 @@ export class ChessService {
 
         if (this.onBoard(piece.row + forward * 2, piece.col)) {
           cell = this.board[piece.row + forward * 2][piece.col];
-          if (this.isEmpty(cell)) {
+          if (this.isEmpty(cell) && this.kingWouldBeSafe(piece, cell)) {
             if (!piece.wasMoved) {
               validCells.push(cell)
             }
