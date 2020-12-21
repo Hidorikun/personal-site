@@ -79,7 +79,9 @@ export class ChessService {
     return this.piecesInCheck;
   }
 
-  highlightValidCells(piece: Piece) {
+  // PRIVATE
+
+  private highlightValidCells(piece: Piece) {
     this.removeHighlightedCells();
 
     for (let cell of this.getValidCells(piece)) {
@@ -87,8 +89,6 @@ export class ChessService {
       this.hightlightedCells.push(cell);
     }
   }
-
-  // PRIVATE
 
   private createBoard() {
     this.board = new Array<Array<Cell>>();

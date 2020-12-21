@@ -14,7 +14,6 @@
                    [cdkDragDisabled]="pieceDisabled(cell.piece)"
                    cdkDragBoundary=".board"
                    [icon]="cell.piece.icon"
-                   (click)="highlightValidMoves(cell.piece)"
                    [ngClass]="getPieceClasses(cell.piece)">
           </fa-icon>
       </div>
