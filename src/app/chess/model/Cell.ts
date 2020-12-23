@@ -15,8 +15,12 @@ export class Cell {
   }
 
   placePiece(piece: Piece) {
+    if (!!piece.cell) {
+      piece.cell.piece = null;
+    }
+    piece.cell = this;
+    piece.hasMoved = true;
+
     this.piece = piece;
-    this.piece.cell = this;
-    this.piece.hasMoved = true;
   }
 }

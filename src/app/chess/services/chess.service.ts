@@ -19,7 +19,7 @@ export class ChessService {
 
   board: Array<Array<Cell>>;
   selectedCell: Cell;
-  draggedPieceCell: Cell;
+  draggedPiece: Piece;
   hightlightedCells = new Array<Cell>();
   lastMovedPiece: Piece;
 
@@ -55,19 +55,30 @@ export class ChessService {
   }
 
   dragPiece(piece: Piece) {
-    this.draggedPieceCell = piece.cell;
+    this.draggedPiece = piece;
 
     this.highlightValidCells(piece);
   }
 
   dropPiece(cell: Cell) {
-    if (cell.highlighted && cell !== this.draggedPieceCell) {
+    if (cell.highlighted && cell !== this.draggedPiece.cell) {
       if (!!cell.piece) {
         this.activePlayer.capturePiece(cell.piece);
       }
-      cell.placePiece(this.draggedPieceCell.piece);
-      this.draggedPieceCell.piece = null;
+
+      if (this.draggedPiece.type === PieceTypeEnum.KING && !this.draggedPiece.hasMoved) {
+        if (cell.row === this.draggedPiece.row) {
+          if (cell.col === 2) {
+            this.board[this.draggedPiece.row][3].placePiece(this.board[this.draggedPiece.row][0].piece)
+          } else if (cell.col === 6) {
+            this.board[this.draggedPiece.row][5].placePiece(this.board[this.draggedPiece.row][7].piece)
+          }
+        }
+      }
+
+      cell.placePiece(this.draggedPiece);
       this.lastMovedPiece = cell.piece;
+
 
       this.detectCheck();
       this.detectMate();
@@ -565,6 +576,41 @@ export class ChessService {
 
     this.addPotentialValidCells(potentialMoves, king, validCells);
 
+    // castle
+    if (!king.hasMoved && !this.piecesInCheck.includes(king)) {
+
+      let canLongCastle = true;
+
+      if (!!this.board[king.row][0].piece && !this.board[king.row][0].piece.hasMoved) {
+        for (let j = 1; j <= 3; j++) {
+          const cell = this.board[king.row][king.col - j];
+          if (!!cell.piece || !this.kingWouldBeSafe(king, cell)) {
+            canLongCastle = false;
+            break;
+          }
+        }
+      }
+
+      if (canLongCastle) {
+        validCells.push(this.board[king.row][king.col - 2 ])
+      }
+
+      let canShortCastle = true;
+
+      if (!!this.board[king.row][7].piece && !this.board[king.row][7].piece.hasMoved) {
+        for (let j = 1; j <= 2; j++) {
+          const cell = this.board[king.row][king.col + j];
+          if (!!cell.piece || !this.kingWouldBeSafe(king, cell)) {
+            canShortCastle = false;
+            break;
+          }
+        }
+      }
+
+      if (canShortCastle) {
+        validCells.push(this.board[king.row][king.col + 2 ])
+      }
+    }
 
     return validCells;
   }
