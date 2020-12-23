@@ -7,6 +7,7 @@ import {faChessPawn} from "@fortawesome/free-solid-svg-icons/faChessPawn";
 import {DirectionsEnum} from "../model/enums/DirectionsEnum";
 import {PlayerColorEnum} from "../model/enums/PlayerColorEnum";
 import {PieceTypeEnum} from "../model/enums/PieceTypeEnum";
+import {PlayerTypeEnum} from "../model/enums/PlayerTypeEnum";
 
 @Injectable({
   providedIn: 'root'
@@ -31,10 +32,9 @@ export class ChessService {
   piecesInCheck: Array<Piece>;
   selectionPieces: Array<Piece>;
 
-
   constructor() {
     this.lightPlayer = new Player(PlayerColorEnum.LIGHT);
-    this.darkPlayer = new Player(PlayerColorEnum.DARK);
+    this.darkPlayer = new Player(PlayerColorEnum.DARK, PlayerTypeEnum.COMPUTER);
 
     this.createBoard();
     this.placePieces();
@@ -62,26 +62,7 @@ export class ChessService {
 
   dropPiece(cell: Cell) {
     if (cell.highlighted && cell !== this.draggedPiece.cell) {
-      if (!!cell.piece) {
-        this.activePlayer.capturePiece(cell.piece);
-      }
-
-      if (this.draggedPiece.type === PieceTypeEnum.KING && !this.draggedPiece.hasMoved) {
-        if (cell.row === this.draggedPiece.row) {
-          if (cell.col === 2) {
-            this.board[this.draggedPiece.row][3].placePiece(this.board[this.draggedPiece.row][0].piece)
-          } else if (cell.col === 6) {
-            this.board[this.draggedPiece.row][5].placePiece(this.board[this.draggedPiece.row][7].piece)
-          }
-        }
-      }
-
-      cell.placePiece(this.draggedPiece);
-      this.lastMovedPiece = cell.piece;
-
-
-      this.detectCheck();
-      this.detectMate();
+      this.movePiece(this.draggedPiece, cell);
 
       if (!this.shouldUpdateLatestPiece()) {
         this.endTurn();
@@ -90,6 +71,7 @@ export class ChessService {
 
     this.removeHighlightedCells();
   }
+
 
   getPiecesInCheck() {
     return this.piecesInCheck;
@@ -120,6 +102,29 @@ export class ChessService {
   }
 
   // PRIVATE
+
+  private movePiece(piece: Piece, cell: Cell) {
+    if (!!cell.piece) {
+      this.activePlayer.capturePiece(cell.piece);
+    }
+
+    if (piece.type === PieceTypeEnum.KING && !piece.hasMoved) {
+      if (cell.row === piece.row) {
+        if (cell.col === 2) {
+          this.board[piece.row][3].placePiece(this.board[piece.row][0].piece)
+        } else if (cell.col === 6) {
+          this.board[piece.row][5].placePiece(this.board[piece.row][7].piece)
+        }
+      }
+    }
+
+    cell.placePiece(piece);
+    this.lastMovedPiece = cell.piece;
+
+
+    this.detectCheck();
+    this.detectMate();
+  }
 
   private highlightValidCells(piece: Piece) {
     this.removeHighlightedCells();
@@ -334,6 +339,10 @@ export class ChessService {
 
   private endTurn() {
     this.activePlayer = this.activePlayer === this.lightPlayer ? this.darkPlayer : this.lightPlayer;
+
+    if (this.activePlayer.type === PlayerTypeEnum.COMPUTER) {
+      this.computerTakeTurn()
+    }
   }
 
   // VALIDATORS
@@ -669,5 +678,27 @@ export class ChessService {
         return cell.piece;
       }
     }
+  }
+
+
+  // ENEMY AI
+
+  private computerTakeTurn() {
+    const availableMoves = [];
+
+    this.activePlayer.pieces.forEach(piece => {
+      this.getValidCells(piece).forEach(cell => {
+        availableMoves.push([piece, cell])
+      });
+    });
+
+    const move = this.getRandom(availableMoves);
+    this.movePiece(move[0], move[1]);
+
+    this.endTurn();
+  }
+
+  private getRandom(a: Array<any>) {
+    return a[Math.floor((Math.random()*a.length))];
   }
 }

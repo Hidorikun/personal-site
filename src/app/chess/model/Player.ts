@@ -1,15 +1,18 @@
 import {Piece} from "./Piece";
 import {PlayerColorEnum} from "./enums/PlayerColorEnum";
+import {PlayerTypeEnum} from "./enums/PlayerTypeEnum";
 
 export class Player {
+  type: PlayerTypeEnum;
   pieces: Array<Piece>;
   capturedPieces: Array<Piece>;
   color: PlayerColorEnum;
   king: Piece;
 
-  constructor(color: PlayerColorEnum) {
+  constructor(color: PlayerColorEnum, type = PlayerTypeEnum.HUMAN) {
     this.color = color;
     this.capturedPieces = [];
+    this.type = type;
   }
 
   setPieces(pieces: Array<Piece>) {
