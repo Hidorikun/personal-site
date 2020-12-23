@@ -6,14 +6,14 @@ import {Cell} from "./Cell";
 export class Piece {
   type: PieceTypeEnum;
   icon: IconDefinition;
-  wasMoved: boolean;
+  hasMoved: boolean;
   owner: Player;
   cell: Cell;
 
-  constructor(type: PieceTypeEnum, icon: IconDefinition, cell: Cell, owner: Player = null) {
+  constructor(type: PieceTypeEnum, icon: IconDefinition, cell: Cell = null, owner: Player = null) {
     this.type = type;
     this.icon = icon;
-    this.wasMoved = false;
+    this.hasMoved = false;
     this.cell = cell;
     this.owner = owner;
   }

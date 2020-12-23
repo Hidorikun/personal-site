@@ -18,7 +18,22 @@
           </fa-icon>
       </div>
     </ng-container>
-    <div *ngIf=gameEnded() class="dialog-wrapper" >
+
+    <div class="dark-captured-container">
+      <fa-icon *ngFor="let piece of getDarkCapturedPieces()"
+               [icon]="piece.icon"
+               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
+               class="captured-piece"
+      ></fa-icon>
+    </div>
+    <div class="light-captured-container">
+      <fa-icon *ngFor="let piece of getLightCapturedPieces()"
+               [icon]="piece.icon"
+               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
+               class="captured-piece"
+      ></fa-icon>
+    </div>
+    <div *ngIf="gameEnded()" class="dialog-wrapper" >
 
       <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-left" [rotate]="90"></fa-icon>
       <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-right" [rotate]="270"></fa-icon>
@@ -36,19 +51,15 @@
 
 
     </div>
-    <div class="dark-captured-container">
-      <fa-icon *ngFor="let piece of getDarkCapturedPieces()"
+    <div *ngIf="shouldUpdateLatestPiece()" class="piece-selection">
+      <h3>Upgrade time!</h3>
+      <fa-icon *ngFor="let piece of getPieceSelection()"
                [icon]="piece.icon"
-               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
-               class="captured-piece"
+               (click)="selectPiece(piece)"
+               [ngClass]="getSelectionPieceClasses(piece)"
+               class="selection-piece"
       ></fa-icon>
     </div>
-    <div class="light-captured-container">
-      <fa-icon *ngFor="let piece of getLightCapturedPieces()"
-               [icon]="piece.icon"
-               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
-               class="captured-piece"
-      ></fa-icon>
-    </div>
+
   </div>
 </div>

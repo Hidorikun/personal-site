@@ -28,6 +28,7 @@ export class ChessComponent implements OnInit{
 
   pieceDisabled(piece: Piece) {
     return (piece.owner != this.chessService.activePlayer)
+      || this.shouldUpdateLatestPiece()
       || this.gameEnded();
   }
 
@@ -45,6 +46,10 @@ export class ChessComponent implements OnInit{
     }
 
     return classes;
+  }
+
+  shouldUpdateLatestPiece() {
+    return this.chessService.shouldUpdateLatestPiece();
   }
 
   gameEnded() {
@@ -75,6 +80,17 @@ export class ChessComponent implements OnInit{
 
     return classes;
   }
+
+  getSelectionPieceClasses(piece: Piece) {
+    const classes = new Array<string>();
+
+    classes.push('fa-4x');
+    classes.push(this.chessService.activePlayer.color === PlayerColorEnum.DARK ? 'dark-piece' : 'light-piece');
+    classes.push('selection-piece');
+
+    return classes;
+  }
+
   getCellClasses(cell: Cell) {
     const classes = new Array<string>();
 
@@ -87,7 +103,7 @@ export class ChessComponent implements OnInit{
   }
 
   getlastMovedPiece() {
-    // return this.chessService.lightPlayer.king;
+    return this.chessService.lightPlayer.king;
     return this.chessService.lastMovedPiece;
   }
 
@@ -102,5 +118,13 @@ export class ChessComponent implements OnInit{
 
   getLightCapturedPieces() {
     return this.chessService.lightPlayer.capturedPieces;
+  }
+
+  getPieceSelection() {
+    return this.chessService.selectionPieces;
+  }
+
+  selectPiece(piece: Piece) {
+    this.chessService.upgradeLatestPiece(piece);
   }
 }
