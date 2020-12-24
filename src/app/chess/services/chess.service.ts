@@ -62,9 +62,9 @@ export class ChessService {
 
   dropPiece(cell: Cell) {
     if (cell.highlighted && cell !== this.draggedPiece.cell) {
-      this.movePiece(this.draggedPiece, cell);
+      this.movePiece(this.draggedPiece, cell, this.board);
 
-      if (!this.shouldUpdateLatestPiece()) {
+      if (!this.shouldUpdateLatestPiece() && !!!this.victoriousPlayer) {
         this.endTurn();
       }
     }
@@ -95,15 +95,15 @@ export class ChessService {
     this.lastMovedPiece.type = piece.type;
     this.lastMovedPiece.icon = piece.icon;
 
-    this.detectCheck();
-    this.detectMate();
+    this.detectCheck(this.board);
+    this.detectMate(this.board);
 
     this.endTurn();
   }
 
   // PRIVATE
 
-  private movePiece(piece: Piece, cell: Cell) {
+  private movePiece(piece: Piece, cell: Cell, board: Array<Array<Cell>>) {
     if (!!cell.piece) {
       this.activePlayer.capturePiece(cell.piece);
     }
@@ -111,9 +111,9 @@ export class ChessService {
     if (piece.type === PieceTypeEnum.KING && !piece.hasMoved) {
       if (cell.row === piece.row) {
         if (cell.col === 2) {
-          this.board[piece.row][3].placePiece(this.board[piece.row][0].piece)
+          board[piece.row][3].placePiece(board[piece.row][0].piece)
         } else if (cell.col === 6) {
-          this.board[piece.row][5].placePiece(this.board[piece.row][7].piece)
+          board[piece.row][5].placePiece(board[piece.row][7].piece)
         }
       }
     }
@@ -121,15 +121,14 @@ export class ChessService {
     cell.placePiece(piece);
     this.lastMovedPiece = cell.piece;
 
-
-    this.detectCheck();
-    this.detectMate();
+    this.detectCheck(board);
+    this.detectMate(board);
   }
 
   private highlightValidCells(piece: Piece) {
     this.removeHighlightedCells();
 
-    for (let cell of this.getValidCells(piece)) {
+    for (let cell of this.getValidCells(piece, this.board)) {
       cell.highlighted = true;
       this.hightlightedCells.push(cell);
     }
@@ -212,7 +211,6 @@ export class ChessService {
     });
   }
 
-
   private setSelectionPieces() {
     this.selectionPieces = [];
     this.selectionPieces.push(new Piece(PieceTypeEnum.KNIGHT, faChessKnight));
@@ -226,8 +224,8 @@ export class ChessService {
     this.hightlightedCells = new Array<Cell>();
   }
 
-  private detectCheck() {
-    const lightDangerousEnemies = this.getDangerousEnemies(this.lightPlayer.king);
+  private detectCheck(board: Array<Array<Cell>>) {
+    const lightDangerousEnemies = this.getDangerousEnemies(this.lightPlayer.king, board);
 
     if (lightDangerousEnemies.length != 0) {
       this.piecesInCheck = lightDangerousEnemies;
@@ -235,7 +233,7 @@ export class ChessService {
       return;
     }
 
-    const darkDangerousEnemies = this.getDangerousEnemies(this.darkPlayer.king);
+    const darkDangerousEnemies = this.getDangerousEnemies(this.darkPlayer.king, board);
 
     if (darkDangerousEnemies.length != 0) {
       this.piecesInCheck = darkDangerousEnemies;
@@ -246,11 +244,11 @@ export class ChessService {
     this.piecesInCheck = [];
   }
 
-  private getDangerousEnemies(ourPiece: Piece) {
+  private getDangerousEnemies(ourPiece: Piece, board: Array<Array<Cell>>) {
     const dangerousPieces = new Array<Piece>();
 
     for (let direction of this.bishopDirections) {
-      const piece = this.getFirstPiece(direction, ourPiece);
+      const piece = this.getFirstPiece(direction, ourPiece, board);
 
       if (!!piece
         && this.areEnemies(ourPiece, piece)
@@ -261,7 +259,7 @@ export class ChessService {
     }
 
     for (let direction of this.rookDirections) {
-      const piece = this.getFirstPiece(direction, ourPiece);
+      const piece = this.getFirstPiece(direction, ourPiece, board);
 
       if (!!piece
         && this.areEnemies(ourPiece, piece)
@@ -276,9 +274,9 @@ export class ChessService {
       const targetCol = ourPiece.col + move[1];
 
       if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
+        const cell = board[targetRow][targetCol];
 
-        if (this.isEnemyPresent(ourPiece, cell) && (cell.piece.type === PieceTypeEnum.KNIGHT)) {
+        if (this.isEnemyPresent(ourPiece, cell, board) && (cell.piece.type === PieceTypeEnum.KNIGHT)) {
           dangerousPieces.push(cell.piece);
         }
       }
@@ -289,9 +287,9 @@ export class ChessService {
       const targetCol = ourPiece.col + move[1];
 
       if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
+        const cell = board[targetRow][targetCol];
 
-        if (this.isEnemyPresent(ourPiece, cell) && (cell.piece.type === PieceTypeEnum.KING)) {
+        if (this.isEnemyPresent(ourPiece, cell, board) && (cell.piece.type === PieceTypeEnum.KING)) {
           dangerousPieces.push(cell.piece);
         }
       }
@@ -304,9 +302,9 @@ export class ChessService {
       const targetCol = ourPiece.col + move[1];
 
       if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
+        const cell = board[targetRow][targetCol];
 
-        if (this.isEnemyPresent(ourPiece, cell) && cell.piece.type === PieceTypeEnum.PAWN) {
+        if (this.isEnemyPresent(ourPiece, cell, board) && cell.piece.type === PieceTypeEnum.PAWN) {
           dangerousPieces.push(cell.piece);
         }
       }
@@ -321,20 +319,20 @@ export class ChessService {
     });
   }
 
-  private detectMate() {
+  private detectMate(board: Array<Array<Cell>>) {
     const enemyPlayer = this.activePlayer === this.lightPlayer ? this.darkPlayer : this.lightPlayer;
 
-    if (this.piecesInCheck.includes(enemyPlayer.king) && !this.playerHasAvailableMoves(enemyPlayer)) {
+    if (this.piecesInCheck.includes(enemyPlayer.king) && !this.playerHasAvailableMoves(enemyPlayer, board)) {
       this.victoriousPlayer = this.activePlayer;
     }
   }
 
-  private playerHasAvailableMoves(player: Player) {
-    return player.pieces.some(piece => this.canMove(piece));
+  private playerHasAvailableMoves(player: Player, board: Array<Array<Cell>>) {
+    return player.pieces.some(piece => this.canMove(piece, board));
   }
 
-  private canMove(piece: Piece) {
-    return this.getValidCells(piece).length > 0;
+  private canMove(piece: Piece, board: Array<Array<Cell>>) {
+    return this.getValidCells(piece, board).length > 0;
   }
 
   private endTurn() {
@@ -355,7 +353,7 @@ export class ChessService {
     return cell.piece.color != piece.color;
   }
 
-  private isEnemyPresent(piece: Piece, cell: Cell): boolean {
+  private isEnemyPresent(piece: Piece, cell: Cell, board: Array<Array<Cell>>): boolean {
     return !!cell.piece && this.areEnemies(cell.piece, piece);
   }
 
@@ -371,12 +369,12 @@ export class ChessService {
     return !!!cell.piece;
   }
 
-  private kingWouldBeSafe(movedPiece: Piece, targetCell: Cell): boolean {
+  private kingWouldBeSafe(movedPiece: Piece, targetCell: Cell, board: Array<Array<Cell>>): boolean {
     const king = movedPiece.owner.king === movedPiece ?
       new Piece(movedPiece.owner.king.type, null, targetCell, movedPiece.owner) : movedPiece.owner.king;
 
     for (let direction of this.bishopDirections) {
-      const piece = this.getFirstPiece(direction, king, movedPiece, targetCell);
+      const piece = this.getFirstPiece(direction, king, board, movedPiece, targetCell);
 
       if (!!piece
         && this.areEnemies(king, piece)
@@ -387,7 +385,7 @@ export class ChessService {
     }
 
     for (let direction of this.rookDirections) {
-      const piece = this.getFirstPiece(direction, king, movedPiece, targetCell);
+      const piece = this.getFirstPiece(direction, king, board, movedPiece, targetCell);
 
       if (!!piece
         && this.areEnemies(king, piece)
@@ -402,11 +400,11 @@ export class ChessService {
       const targetCol = king.col + move[1];
 
       if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
+        const cell = board[targetRow][targetCol];
 
         if (cell === targetCell) continue;
 
-        if (this.isEnemyPresent(king, cell) && (cell.piece.type === PieceTypeEnum.KNIGHT)) {
+        if (this.isEnemyPresent(king, cell, board) && (cell.piece.type === PieceTypeEnum.KNIGHT)) {
           return false;
         }
       }
@@ -417,11 +415,11 @@ export class ChessService {
       const targetCol = king.col + move[1];
 
       if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
+        const cell = board[targetRow][targetCol];
 
         if (cell === targetCell) continue;
 
-        if (this.isEnemyPresent(king, cell) && (cell.piece.type === PieceTypeEnum.KING)) {
+        if (this.isEnemyPresent(king, cell, board) && (cell.piece.type === PieceTypeEnum.KING)) {
           return false;
         }
       }
@@ -434,9 +432,9 @@ export class ChessService {
       const targetCol = king.col + move[1];
 
       if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
+        const cell = board[targetRow][targetCol];
 
-        if (this.isEnemyPresent(king, cell) && cell.piece.type === PieceTypeEnum.PAWN) {
+        if (this.isEnemyPresent(king, cell, board) && cell.piece.type === PieceTypeEnum.PAWN) {
           return false;
         }
       }
@@ -483,48 +481,48 @@ export class ChessService {
 
   }
 
-  private getValidCells(piece: Piece): Array<Cell> {
+  private getValidCells(piece: Piece, board: Array<Array<Cell>>): Array<Cell> {
     if (piece.type === PieceTypeEnum.PAWN) {
-      return this.getPawnValidCells(piece);
+      return this.getPawnValidCells(piece, board);
     }
     if (piece.type === PieceTypeEnum.KNIGHT) {
-      return this.getKnightValidCells(piece);
+      return this.getKnightValidCells(piece, board);
     }
     if (piece.type === PieceTypeEnum.ROOK) {
-      return this.getRookValidCells(piece);
+      return this.getRookValidCells(piece, board);
     }
     if (piece.type === PieceTypeEnum.BISHOP) {
-      return this.getBishopValidCells(piece);
+      return this.getBishopValidCells(piece, board);
     }
     if (piece.type === PieceTypeEnum.QUEEN) {
-      return this.getQueenValidCells(piece);
+      return this.getQueenValidCells(piece, board);
     }
     if (piece.type === PieceTypeEnum.KING) {
-      return this.getKingValidCells(piece);
+      return this.getKingValidCells(piece, board);
     }
   }
 
-  private getKnightValidCells(knight: Piece): Array<Cell> {
+  private getKnightValidCells(knight: Piece, board: Array<Array<Cell>>): Array<Cell> {
     const validCells = new Array<Cell>();
 
-    this.addPotentialValidCells(this.knightMoves, knight, validCells);
+    this.addPotentialValidCells(this.knightMoves, knight, validCells, board);
 
     return validCells;
   }
 
-  private getPawnValidCells(pawn: Piece): Array<Cell> {
+  private getPawnValidCells(pawn: Piece, board: Array<Array<Cell>>): Array<Cell> {
     const validCells = new Array<Cell>();
 
     const forward = pawn.color == PlayerColorEnum.DARK ? 1 : -1;
 
     if (this.onBoard(pawn.row + forward, pawn.col)) {
-      let cell = this.board[pawn.row + forward][pawn.col];
-      if (this.isEmpty(cell) && this.kingWouldBeSafe(pawn, cell)) {
+      let cell = board[pawn.row + forward][pawn.col];
+      if (this.isEmpty(cell) && this.kingWouldBeSafe(pawn, cell, board)) {
         validCells.push(cell);
 
         if (this.onBoard(pawn.row + forward * 2, pawn.col)) {
-          cell = this.board[pawn.row + forward * 2][pawn.col];
-          if (this.isEmpty(cell) && this.kingWouldBeSafe(pawn, cell)) {
+          cell = board[pawn.row + forward * 2][pawn.col];
+          if (this.isEmpty(cell) && this.kingWouldBeSafe(pawn, cell, board)) {
             if (!pawn.hasMoved) {
               validCells.push(cell)
             }
@@ -538,8 +536,8 @@ export class ChessService {
       const targetCol = pawn.col + move[1];
 
       if (this.onBoard(targetRow, targetCol)) {
-        const cell = this.board[targetRow][targetCol];
-        if (this.isEnemyPresent(pawn, cell) && this.kingWouldBeSafe(pawn, cell)) {
+        const cell = board[targetRow][targetCol];
+        if (this.isEnemyPresent(pawn, cell, board) && this.kingWouldBeSafe(pawn, cell, board)) {
           validCells.push(cell)
         }
       }
@@ -548,52 +546,52 @@ export class ChessService {
     return validCells;
   }
 
-  private getRookValidCells(rook: Piece): Array<Cell> {
+  private getRookValidCells(rook: Piece, board: Array<Array<Cell>>): Array<Cell> {
     const validCells = new Array<Cell>();
 
     this.rookDirections.forEach( direction => {
-      this.addDirectionValidCells(direction, rook, validCells);
+      this.addDirectionValidCells(direction, rook, validCells, board);
     });
 
     return validCells;
   }
 
-  private getBishopValidCells(bishop: Piece): Array<Cell> {
+  private getBishopValidCells(bishop: Piece, board: Array<Array<Cell>>): Array<Cell> {
     const validCells = new Array<Cell>();
 
    this.bishopDirections.forEach( direction => {
-      this.addDirectionValidCells(direction, bishop, validCells);
+      this.addDirectionValidCells(direction, bishop, validCells, board);
     });
 
     return validCells;
   }
 
-  private getQueenValidCells(queen: Piece): Array<Cell> {
+  private getQueenValidCells(queen: Piece, board: Array<Array<Cell>>): Array<Cell> {
     const validCells = new Array<Cell>();
 
     this.directions.forEach( direction => {
-      this.addDirectionValidCells(direction, queen, validCells);
+      this.addDirectionValidCells(direction, queen, validCells, board);
     });
 
     return validCells;
   }
 
-  private getKingValidCells(king: Piece): Array<Cell> {
+  private getKingValidCells(king: Piece, board: Array<Array<Cell>>): Array<Cell> {
     const validCells = new Array<Cell>();
 
     const potentialMoves = this.kingMoves;
 
-    this.addPotentialValidCells(potentialMoves, king, validCells);
+    this.addPotentialValidCells(potentialMoves, king, validCells, board);
 
     // castle
     if (!king.hasMoved && !this.piecesInCheck.includes(king)) {
 
       let canLongCastle = true;
 
-      if (!!this.board[king.row][0].piece && !this.board[king.row][0].piece.hasMoved) {
+      if (!!board[king.row][0].piece && !board[king.row][0].piece.hasMoved) {
         for (let j = 1; j <= 3; j++) {
-          const cell = this.board[king.row][king.col - j];
-          if (!!cell.piece || !this.kingWouldBeSafe(king, cell)) {
+          const cell = board[king.row][king.col - j];
+          if (!!cell.piece || !this.kingWouldBeSafe(king, cell, board)) {
             canLongCastle = false;
             break;
           }
@@ -601,15 +599,15 @@ export class ChessService {
       }
 
       if (canLongCastle) {
-        validCells.push(this.board[king.row][king.col - 2 ])
+        validCells.push(board[king.row][king.col - 2 ])
       }
 
       let canShortCastle = true;
 
-      if (!!this.board[king.row][7].piece && !this.board[king.row][7].piece.hasMoved) {
+      if (!!board[king.row][7].piece && !board[king.row][7].piece.hasMoved) {
         for (let j = 1; j <= 2; j++) {
-          const cell = this.board[king.row][king.col + j];
-          if (!!cell.piece || !this.kingWouldBeSafe(king, cell)) {
+          const cell = board[king.row][king.col + j];
+          if (!!cell.piece || !this.kingWouldBeSafe(king, cell, board)) {
             canShortCastle = false;
             break;
           }
@@ -617,49 +615,56 @@ export class ChessService {
       }
 
       if (canShortCastle) {
-        validCells.push(this.board[king.row][king.col + 2 ])
+        validCells.push(board[king.row][king.col + 2 ])
       }
     }
 
     return validCells;
   }
 
-  private addPotentialValidCells(potentialMoves, piece: Piece, validCells) {
+  private addPotentialValidCells(potentialMoves, piece: Piece, validCells, board: Array<Array<Cell>>) {
     potentialMoves.forEach(move => {
       const newRow = piece.row + move[0];
       const newCol = piece.col + move[1];
 
       if (this.onBoard(newRow, newCol)) {
-        const cell = this.board[newRow][newCol];
-        if (this.isNotFriendly(piece, cell) && this.kingWouldBeSafe(piece, cell)) {
+        const cell = board[newRow][newCol];
+        if (this.isNotFriendly(piece, cell) && this.kingWouldBeSafe(piece, cell, board)) {
           validCells.push(cell);
         }
       }
     });
   }
 
-  private addDirectionValidCells(direction, piece: Piece, validCells) {
+  private addDirectionValidCells(direction, piece: Piece, validCells, board: Array<Array<Cell>>) {
     for (let move of direction) {
       const targetRow = piece.row + move[0];
       const targetCol = piece.col + move[1];
 
       if (!this.onBoard(targetRow, targetCol)) return;
 
-      const cell = this.board[targetRow][targetCol];
+      const cell = board[targetRow][targetCol];
       if (!!cell.piece) {
-        if (this.areEnemies(piece, cell.piece) && this.kingWouldBeSafe(piece, cell)) {
+        if (this.areEnemies(piece, cell.piece) && this.kingWouldBeSafe(piece, cell, board)) {
           validCells.push(cell);
         }
         return;
       }
 
-      if (this.kingWouldBeSafe(piece, cell)) {
+      if (this.kingWouldBeSafe(piece, cell, board)) {
         validCells.push(cell);
       }
     }
   }
 
-  private getFirstPiece(direction: Array<[number, number]>, piece: Piece, movedPiece: Piece = null, targetCell: Cell = null): Piece {
+  private getFirstPiece(
+    direction: Array<[number, number]>,
+    piece: Piece,
+    board: Array<Array<Cell>>,
+    movedPiece: Piece = null,
+    targetCell: Cell = null,
+    ): Piece {
+
     for (let move of direction) {
       const targetRow = piece.row + move[0];
       const targetCol = piece.col + move[1];
@@ -668,7 +673,7 @@ export class ChessService {
         return null;
       }
 
-      const cell = this.board[targetRow][targetCol];
+      const cell = board[targetRow][targetCol];
 
       if (cell === targetCell) {
         return movedPiece;
@@ -687,13 +692,16 @@ export class ChessService {
     const availableMoves = [];
 
     this.activePlayer.pieces.forEach(piece => {
-      this.getValidCells(piece).forEach(cell => {
+      this.getValidCells(piece, this.board).forEach(cell => {
         availableMoves.push([piece, cell])
       });
     });
 
-    const move = this.getRandom(availableMoves);
-    this.movePiece(move[0], move[1]);
+    const attacks = availableMoves.filter(move => this.isEnemyPresent(move[0], move[1], this.board));
+
+    const move = attacks.length > 0 ? this.getRandom(attacks) : this.getRandom(availableMoves);
+
+    this.movePiece(move[0], move[1], this.board);
 
     this.endTurn();
   }
