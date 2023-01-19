@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "node server.js",
     "build": "ng build",
-    "gh-build": "ng bulid",
+    "gh-build": "ng build",
     "serve": "ng serve",
     "test": "ng test",
     "lint": "ng lint",
