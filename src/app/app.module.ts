@@ -8,7 +8,6 @@ import { ProjectListComponent } from './project-list/project-list.component';
 import { ChessComponent } from './chess/chess.component'
 import { ProfileComponent } from './profile/profile.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -22,7 +21,6 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
-    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

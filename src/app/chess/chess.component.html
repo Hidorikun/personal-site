@@ -1,65 +1,65 @@
-<div class="page">
-  <div cdkDropListGroup
-       [ngClass]="getBoardClasses()">
-    <ng-container *ngFor="let row of getBoard(); let i = index">
-      <div *ngFor="let cell of row; let j = index"
-           cdkDropList
-           class="cell"
-           (cdkDropListDropped)="dropPiece(cell)"
-           [ngClass]="getCellClasses(cell)">
+<!--<div class="page">-->
+<!--  <div cdkDropListGroup-->
+<!--       [ngClass]="getBoardClasses()">-->
+<!--    <ng-container *ngFor="let row of getBoard(); let i = index">-->
+<!--      <div *ngFor="let cell of row; let j = index"-->
+<!--           cdkDropList-->
+<!--           class="cell"-->
+<!--           (cdkDropListDropped)="dropPiece(cell)"-->
+<!--           [ngClass]="getCellClasses(cell)">-->
 
-          <fa-icon *ngIf="!!cell.piece"
-                   cdkDrag
-                   (cdkDragStarted)="dragPiece(cell.piece)"
-                   [cdkDragDisabled]="pieceDisabled(cell.piece)"
-                   cdkDragBoundary=".board"
-                   [icon]="cell.piece.icon"
-                   [ngClass]="getPieceClasses(cell.piece)">
-          </fa-icon>
-      </div>
-    </ng-container>
+<!--          <fa-icon *ngIf="!!cell.piece"-->
+<!--                   cdkDrag-->
+<!--                   (cdkDragStarted)="dragPiece(cell.piece)"-->
+<!--                   [cdkDragDisabled]="pieceDisabled(cell.piece)"-->
+<!--                   cdkDragBoundary=".board"-->
+<!--                   [icon]="cell.piece.icon"-->
+<!--                   [ngClass]="getPieceClasses(cell.piece)">-->
+<!--          </fa-icon>-->
+<!--      </div>-->
+<!--    </ng-container>-->
 
-    <div class="dark-captured-container">
-      <fa-icon *ngFor="let piece of getDarkCapturedPieces()"
-               [icon]="piece.icon"
-               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
-               class="captured-piece"
-      ></fa-icon>
-    </div>
-    <div class="light-captured-container">
-      <fa-icon *ngFor="let piece of getLightCapturedPieces()"
-               [icon]="piece.icon"
-               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"
-               class="captured-piece"
-      ></fa-icon>
-    </div>
-    <div *ngIf="gameEnded()" class="dialog-wrapper" >
+<!--    <div class="dark-captured-container">-->
+<!--      <fa-icon *ngFor="let piece of getDarkCapturedPieces()"-->
+<!--               [icon]="piece.icon"-->
+<!--               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"-->
+<!--               class="captured-piece"-->
+<!--      ></fa-icon>-->
+<!--    </div>-->
+<!--    <div class="light-captured-container">-->
+<!--      <fa-icon *ngFor="let piece of getLightCapturedPieces()"-->
+<!--               [icon]="piece.icon"-->
+<!--               [styles]="{'stroke': 'black', 'stroke-width': '10px'}"-->
+<!--               class="captured-piece"-->
+<!--      ></fa-icon>-->
+<!--    </div>-->
+<!--    <div *ngIf="gameEnded()" class="dialog-wrapper" >-->
 
-      <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-left" [rotate]="90"></fa-icon>
-      <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-right" [rotate]="270"></fa-icon>
+<!--      <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-left" [rotate]="90"></fa-icon>-->
+<!--      <fa-icon [icon]="faBookmark" class="fa-4x ribbon-side-right" [rotate]="270"></fa-icon>-->
 
-      <div class="dialog"></div>
+<!--      <div class="dialog"></div>-->
 
-      <fa-icon *ngIf="!!getlastMovedPiece()"
-               [icon]="getlastMovedPiece().icon"
-               [ngClass]="getDialogPieceClasses(getlastMovedPiece())">
-      </fa-icon>
+<!--      <fa-icon *ngIf="!!getlastMovedPiece()"-->
+<!--               [icon]="getlastMovedPiece().icon"-->
+<!--               [ngClass]="getDialogPieceClasses(getlastMovedPiece())">-->
+<!--      </fa-icon>-->
 
-      <div class="ribbon">
-        <h3>{{getVictoryMessage()}}</h3>
-      </div>
+<!--      <div class="ribbon">-->
+<!--        <h3>{{getVictoryMessage()}}</h3>-->
+<!--      </div>-->
 
 
-    </div>
-    <div *ngIf="shouldUpdateLatestPiece()" class="piece-selection">
-      <h3>Upgrade time!</h3>
-      <fa-icon *ngFor="let piece of getPieceSelection()"
-               [icon]="piece.icon"
-               (click)="selectPiece(piece)"
-               [ngClass]="getSelectionPieceClasses(piece)"
-               class="selection-piece"
-      ></fa-icon>
-    </div>
+<!--    </div>-->
+<!--    <div *ngIf="shouldUpdateLatestPiece()" class="piece-selection">-->
+<!--      <h3>Upgrade time!</h3>-->
+<!--      <fa-icon *ngFor="let piece of getPieceSelection()"-->
+<!--               [icon]="piece.icon"-->
+<!--               (click)="selectPiece(piece)"-->
+<!--               [ngClass]="getSelectionPieceClasses(piece)"-->
+<!--               class="selection-piece"-->
+<!--      ></fa-icon>-->
+<!--    </div>-->
 
-  </div>
-</div>
+<!--  </div>-->
+<!--</div>-->
